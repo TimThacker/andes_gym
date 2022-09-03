@@ -24,7 +24,7 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 
 
-class AndesFreqControl(gym.Env):
+class AndesPrimaryFreqControl(gym.Env):
     """
     Load frequency control environment using ANDES.
 
