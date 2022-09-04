@@ -53,7 +53,7 @@ class AndesPrimaryFreqControl(gym.Env):
         path = pathlib.Path(__file__).parent.absolute()
         self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM.xlsx")
 
-        self.tf = 10.0     # end of simulation time
+        self.tf = 30.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
         self.fixt = True   # if we do fixed step integration
         self.no_pbar = True
@@ -113,7 +113,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        self.disturbance = 0.6  ## random.uniform(0.2, 0.5)
+        self.disturbance = 0.1  ## random.uniform(0.2, 0.5)
         # self.disturbance = random.uniform(0.2, 0.5)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
@@ -196,9 +196,9 @@ class AndesPrimaryFreqControl(gym.Env):
         # reward -= np.sum(np.abs(2 * 100 * action))
 
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - 1)))
+            reward -= np.sum(np.abs(3000 * (freq - 0.997447)))
         else:
-            reward -= np.sum(np.abs(100 * (freq - 1)))
+            reward -= np.sum(np.abs(100 * (freq - 0.997447)))
 
         # store last action
         self.action_last = action
