@@ -110,6 +110,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.PQ.config.q2q = 1
         self.sim_case.PQ.config.q2z = 0
         self.sim_case.PQ.config.q2i = 0
+        self.sim_case.TDS.config.critera = 0
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
