@@ -23,7 +23,7 @@ model.learn(total_timesteps=1000)  # we need to change the total steps with acti
 
 print("training {} completed using {}".format(id, time.time() - time_start))
 
-model.save(save_dr + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
+model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
 freq = pd.DataFrame(env.final_freq)
 freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
 
