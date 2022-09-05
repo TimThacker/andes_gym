@@ -53,8 +53,8 @@ class AndesPrimaryFreqControl(gym.Env):
         path = pathlib.Path(__file__).parent.absolute()
         self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM.xlsx")
 
-        self.tf = 30.0     # end of simulation time
-        self.tstep = 1/100  # simulation time step
+        self.tf = 20.0     # end of simulation time
+        self.tstep = 1/30  # simulation time step
         self.fixt = True   # if we do fixed step integration
         self.no_pbar = True
 
