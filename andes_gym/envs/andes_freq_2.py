@@ -119,7 +119,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # configurations
         self.sim_case.TDS.config.fixt = self.fixt
-        self.sim_case.TDS.critera = 0
+        self.sim_case.TDS.config.critera = 0
 
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
@@ -150,6 +150,7 @@ class AndesPrimaryFreqControl(gym.Env):
             next_time = float(self.action_instants[self.i])
 
         self.sim_case.TDS.config.tf = next_time
+        self.sim_case.TDS.config.critera = 0
         self.i += 1
 
         return self.sim_case.TDS.run(self.no_pbar)
