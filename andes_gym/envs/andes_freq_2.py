@@ -67,7 +67,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-0.1, high=0.1, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-0.3, high=0.3, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-5, high=5, shape=(self.N_Gov,))
 
         self.i = 0  # index of the current action
@@ -199,6 +199,9 @@ class AndesPrimaryFreqControl(gym.Env):
             reward -= np.sum(np.abs(3000 * (freq - 0.997388)))
         else:
             reward -= np.sum(np.abs(100 * (freq - 0.997388)))
+            
+        if freq > 1.01:
+            reward -= 200
 
         # store last action
         self.action_last = action
