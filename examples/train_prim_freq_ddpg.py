@@ -11,7 +11,7 @@ from stable_baselines3 import DDPG
 
 
 plot_episode = True
-save_dir = "C:\Users\tntth\andes_gym\examples\delay_learning_200_action_75_Primary"
+save_dir = "C:/Users/tntth/andes_gym/examples/delay_learning_200_action_75_Primary/"
 
 for id in range(1, 2):
     env = gym.make('AndesPrimaryFreqControl-v0')
