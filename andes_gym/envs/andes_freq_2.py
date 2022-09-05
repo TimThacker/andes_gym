@@ -61,7 +61,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # we need to let the agent to observe the disturbed trajectory before any actions taken,
         # therefore the following instant sequence is not correct: np.array([0.1, 5, 10]).
         # Instead, we will use this instant sequence: np.array([5,..., 10])
-        self.action_instants = np.linspace(0.1, 20, 20)
+        self.action_instants = np.linspace(0, 20, 40)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
@@ -198,9 +198,9 @@ class AndesPrimaryFreqControl(gym.Env):
         # reward -= np.sum(np.abs(2 * 100 * action))
 
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - 0.994858)))
+            reward -= np.sum(np.abs(3000 * (freq - 0.997388)))
         else:
-            reward -= np.sum(np.abs(100 * (freq - 0.994858)))
+            reward -= np.sum(np.abs(100 * (freq - 0.997388)))
 
         # store last action
         self.action_last = action
