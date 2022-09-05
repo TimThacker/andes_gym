@@ -9,12 +9,12 @@ import torch
 from stable_baselines3.ddpg.policies import MlpPolicy
 from stable_baselines3 import DDPG
 plot_episode = True
-save_dir = "delay_learning_200_action_40_GOV/"
+save_dir = "delay_learning_200_action_40/"
 env = gym.make('AndesPrimaryFreqControl-v0')
 policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])  # kwargs == keyword arguments
 model = DDPG(MlpPolicy, env, verbose=0, policy_kwargs=policy_kwargs, learning_starts=200)
 time_start = time.time()
-model.learn(total_timesteps=10000)  # we need to change the total steps with action numbers
+model.learn(total_timesteps=100000)  # we need to change the total steps with action numbers
 print("training {} completed using {}".format(id, time.time() - time_start))
 obs = env.reset()
 done = False
