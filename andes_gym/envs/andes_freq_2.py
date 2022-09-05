@@ -173,12 +173,9 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # apply control for current step
-        if np.any(self.sim_case.dae.ts.t) < 2.2:
-            self.sim_case.TurbineGov.set(
-                src='uomega0', idx=self.tg_idx, value=action, attr='v')
-        else:
-            self.sim_case.TurbineGov.set(
-                src='uomega0', idx=self.tg_idx, value = 0, attr='v')
+
+        self.sim_case.TurbineGov.set(
+            src='uomega0', idx=self.tg_idx, value=action, attr='v')
 
         # Run andes TDS to the next time and increment self.i by 1
         sim_crashed = not self.sim_to_next()
