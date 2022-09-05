@@ -54,14 +54,14 @@ class AndesPrimaryFreqControl(gym.Env):
         self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM.xlsx")
 
         self.tf = 20.0     # end of simulation time
-        self.tstep = 1/100  # simulation time step
+        self.tstep = 1/30  # simulation time step
         self.fixt = True   # if we do fixed step integration
         self.no_pbar = True
 
         # we need to let the agent to observe the disturbed trajectory before any actions taken,
         # therefore the following instant sequence is not correct: np.array([0.1, 5, 10]).
         # Instead, we will use this instant sequence: np.array([5,..., 10])
-        self.action_instants = np.linspace(0.2, 20, 100)
+        self.action_instants = np.linspace(0.2, 20, 75)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
@@ -119,7 +119,6 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # configurations
         self.sim_case.TDS.config.fixt = self.fixt
-        self.sim_case.TDS.config.critera = 0
 
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
@@ -150,7 +149,6 @@ class AndesPrimaryFreqControl(gym.Env):
             next_time = float(self.action_instants[self.i])
 
         self.sim_case.TDS.config.tf = next_time
-        self.sim_case.TDS.config.critera = 0
         self.i += 1
 
         return self.sim_case.TDS.run(self.no_pbar)
