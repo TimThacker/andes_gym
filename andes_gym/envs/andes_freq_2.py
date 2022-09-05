@@ -201,7 +201,7 @@ class AndesPrimaryFreqControl(gym.Env):
         else:
             reward -= np.sum(np.abs(100 * (freq - 0.997388)))
             
-        if np.sum(freq - 1.01) > 1.01:
+        if np.sum(freq - 1.01) > 0:
             reward -= 200
 
         # store last action
