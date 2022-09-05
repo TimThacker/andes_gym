@@ -67,7 +67,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=0, high=0.3, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=0, high=0, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-5, high=5, shape=(self.N_Gov,))
 
         self.i = 0  # index of the current action
