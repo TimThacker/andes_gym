@@ -19,7 +19,7 @@ for id in range(1, 2):
     model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, learning_starts=200)
 
     time_start = time.time()
-    model.learn(total_timesteps=50000)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=5000)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
 
