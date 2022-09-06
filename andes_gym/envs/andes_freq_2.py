@@ -175,7 +175,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # apply control for current step
 
         self.sim_case.TurbineGov.set(
-            src='uomega0', idx=self.tg_idx, value=0, attr='v')
+            src='uomega0', idx=self.tg_idx, value=action, attr='v')
 
         # Run andes TDS to the next time and increment self.i by 1
         sim_crashed = not self.sim_to_next()
@@ -197,9 +197,9 @@ class AndesPrimaryFreqControl(gym.Env):
         # reward -= np.sum(np.abs(2 * 100 * action))
 
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - .997)))
+            reward -= np.sum(np.abs(3000 * (freq - .994712453)))
         else:
-            reward -= np.sum(np.abs(100 * (freq - .997)))
+            reward -= np.sum(np.abs(100 * (freq - .994712453)))
             
         #if np.sum(freq - 1.01) > 0:
             #reward -= 200
