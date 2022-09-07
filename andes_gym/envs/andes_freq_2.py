@@ -161,6 +161,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
         self.freq_print.append(freq[0])
+        self.freq_record.append(freq)
         return freq
 
     def step(self, action):
