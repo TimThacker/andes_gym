@@ -85,13 +85,12 @@ class AndesPrimaryFreqControl(gym.Env):
         self.final_obs_render = None
 
         self.freq_print = []
-        self.freq_record = []
         self.action_print = []
         self.reward_print = []
 
         # record the final frequency
         self.final_freq = []
-
+        self.freq_record = []
 
     def seed(self, seed=None):
         """
@@ -134,7 +133,6 @@ class AndesPrimaryFreqControl(gym.Env):
         assert self.sim_to_next(), "First simulation step failed"
 
         self.freq_print = []
-        self.freq_record = []
         self.action_0_print = []
         self.action_1_print = []
         self.action_2_print = []
@@ -161,7 +159,6 @@ class AndesPrimaryFreqControl(gym.Env):
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
         self.freq_print.append(freq[0])
-        self.freq_record.extend(freq)
         return freq
 
     def step(self, action):
@@ -213,7 +210,6 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # add the first frequency value to `self.freq_print`
         self.freq_print.append(freq[0])
-        self.freq_record.extend(freq)
         self.action_0_print.append(action[0])
         self.action_1_print.append(action[1])
         self.action_2_print.append(action[2])
@@ -244,6 +240,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
             # record the final frequency
             self.final_freq.append(self.freq_print[-1] * 60)
+            
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
@@ -254,7 +251,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
-
+            self.freq_record.append = np.array(ydata)
 
         return obs, reward, done, {}
 
