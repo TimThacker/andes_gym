@@ -26,7 +26,7 @@ for id in range(1, 2):
     model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
     freq = pd.DataFrame(env.final_freq)
     freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
-    trainedfreq = pd.DataFrame(env.final_obs_render)
+    trainedfreq = pd.DataFrame(env.obs)
     trainedfreq.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
 
     obs = env.reset()
