@@ -42,7 +42,7 @@ for id in range(1, 2):
     plt.grid()
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
-    plt.title("Reduced frequency nadir under fixed disturbance via DRL primary control", fontsize=16)
+    plt.title("Final frequency value per epsiode via DRL", fontsize=16)
     plt.tight_layout()
     plt.savefig(save_dir + "andes_primfreq_ddpg_fix_{}.png".format(id))
     fig = plt.figure(figsize=(9, 6))
