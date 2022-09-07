@@ -133,6 +133,7 @@ class AndesPrimaryFreqControl(gym.Env):
         assert self.sim_to_next(), "First simulation step failed"
 
         self.freq_print = []
+        self.freq_record = []
         self.action_0_print = []
         self.action_1_print = []
         self.action_2_print = []
@@ -210,6 +211,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # add the first frequency value to `self.freq_print`
         self.freq_print.append(freq[0])
+        self.freq_record.append(freq)
         self.action_0_print.append(action[0])
         self.action_1_print.append(action[1])
         self.action_2_print.append(action[2])
