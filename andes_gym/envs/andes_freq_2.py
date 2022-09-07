@@ -85,6 +85,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.final_obs_render = None
 
         self.freq_print = []
+        self.freq_record = []
         self.action_print = []
         self.reward_print = []
 
