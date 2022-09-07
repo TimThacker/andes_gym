@@ -90,7 +90,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # record the final frequency
         self.final_freq = []
-        self.record_freq = []
+
 
     def seed(self, seed=None):
         """
@@ -240,7 +240,6 @@ class AndesPrimaryFreqControl(gym.Env):
 
             # record the final frequency
             self.final_freq.append(self.freq_print[-1] * 60)
-            self.record_freq.append(self.freq_print)
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
