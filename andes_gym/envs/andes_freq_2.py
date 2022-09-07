@@ -90,6 +90,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # record the final frequency
         self.final_freq = []
+        self.record_freq = []
 
     def seed(self, seed=None):
         """
