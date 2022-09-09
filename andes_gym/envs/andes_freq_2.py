@@ -90,6 +90,16 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # record the final frequency
         self.final_freq = []
+        
+        # Record frequency of episode
+        self.episode_freq = []
+        # Record episode of highest reward
+        self.best_episode = None
+        # Record best reward
+        self.best_reward = -10000
+        # Record frequency of best episode
+        self.best_episode_freq = []
+        
 
     def seed(self, seed=None):
         """
@@ -138,6 +148,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.action_3_print = []
         self.action_4_print = []
         self.reward_print = []
+        self.episode_freq = []
 
     def sim_to_next(self):
         """
@@ -239,7 +250,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
             # record the final frequency
             self.final_freq.append(self.freq_print[-1] * 60)
-            
+                        
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
@@ -250,6 +261,12 @@ class AndesPrimaryFreqControl(gym.Env):
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
+            
+            
+            if self.reward_print > self.best_reward:
+                self.best_reward = sum(self.reward_print)
+                #self.best_episode = self.XXXX
+                self.best_episode_freq = self.final_obs_render
 
         return obs, reward, done, {}
 
