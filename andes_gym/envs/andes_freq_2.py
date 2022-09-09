@@ -90,7 +90,6 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # record the final frequency
         self.final_freq = []
-        self.freq_record = []
 
     def seed(self, seed=None):
         """
@@ -251,7 +250,6 @@ class AndesPrimaryFreqControl(gym.Env):
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
-            self.freq_record.append = np.array(ydata)
 
         return obs, reward, done, {}
 
