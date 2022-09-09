@@ -26,7 +26,7 @@ for id in range(1, 2):
     model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
     freq = pd.DataFrame(env.final_freq)
     freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
-    freqRec = pd.DataFrame(env.final_obs_render)
+    freqRec = pd.DataFrame(env.best_episode_freq)
     freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
 
 
@@ -60,3 +60,6 @@ for id in range(1, 2):
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.final_obs_render[:, i] * 60)
     plt.savefig("fig_primfreq_dynamics.pdf")
+    for i in range(env.N_Bus):
+        ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
+    plt.savefig("fig_primfreq_dynamics_best.pdf")
