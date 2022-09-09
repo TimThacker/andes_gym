@@ -57,7 +57,7 @@ for id in range(1, 2):
     ax.ticklabel_format(useOffset=False)
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.final_obs_render[:, i] * 60)
-        freqRec = pd.DataFrame(env.freq_record[:,i])
+        freqRec = pd.DataFrame(env.final_obs_render[:,i])
         freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
     plt.savefig("fig_primfreq_dynamics.pdf")
    
