@@ -263,7 +263,7 @@ class AndesPrimaryFreqControl(gym.Env):
             self.final_obs_render = np.array(ydata)
             
             
-            if self.reward_print > self.best_reward:
+            if sum(self.reward_print) > self.best_reward:
                 self.best_reward = sum(self.reward_print)
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
