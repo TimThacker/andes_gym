@@ -59,5 +59,5 @@ for id in range(1, 2):
         ax.plot(env.t_render, env.final_obs_render[:, i] * 60)
         freqRec = env.final_obs_render[:,i]    
     plt.savefig("fig_primfreq_dynamics.pdf")
-    freqRec = pd.Dataframe(freqRec)
+    freqRec = pd.DataFrame(freqRec)
     freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
