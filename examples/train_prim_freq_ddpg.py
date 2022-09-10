@@ -9,7 +9,7 @@ import torch
 from stable_baselines3.ddpg.policies import MlpPolicy
 from stable_baselines3 import DDPG
 
-
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
 save_dir = "C:/Users/tntth/andes_gym/examples/delay_learning_200_action_75_Primary/"
 
