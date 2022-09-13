@@ -30,7 +30,7 @@ for id in range(1, 2):
     freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
     action_record = pd.DataFrame(env.action_record)
     action_record.to_csv(save_dir + "andes_primfreq_ddpg_action_{}.csv".format(id), index=False)
-    coord_record = pd.DataFrame(env.coord_record)
+    coord_record = pd.DataFrame(env.best_coord_record)
     coord_record.to_csv(save_dir + "andes_primfreq_ddpg_coord_{}.csv".format(id), index=False)
 
 
