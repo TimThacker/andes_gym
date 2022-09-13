@@ -184,11 +184,15 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # apply control for current step
-        self.simtimes.append(self.sim_case.dae.ts.t)
-   
-        self.sim_case.TurbineGov.set(
-            src='uomega0', idx=self.tg_idx, value=action, attr='v')
-        self.coord_record.append(action)
+       
+        if self.sim_case.dae.ts.t > 3:
+            self.sim_case.TurbineGov.set(
+                src='uomega0', idx=self.tg_idx, value=action, attr='v')
+            self.coord_record.append(action)
+        else: 
+            self.sim_case.TurbineGov.set(
+                src='uomega0', idx=self.tg_idx, value=0, attr='v')
+            self.coord_record.append(0)
 
 
         # Run andes TDS to the next time and increment self.i by 1
