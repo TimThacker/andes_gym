@@ -99,8 +99,6 @@ class AndesPrimaryFreqControl(gym.Env):
         self.best_reward = -10000
         # Record frequency of best episode
         self.best_episode_freq = []
-        self.action_record = []
-        self.best_action_record = []
         self.coord_record = []
         self.best_coord_record = []
         
@@ -186,15 +184,11 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # apply control for current step
 
-        if np.any(self.sim_case.dae.ts.t) < 3:
-            self.sim_case.TurbineGov.set(
-                src='uomega0', idx=self.tg_idx, value=action, attr='v')
-            self.coord_record.append(action)
-        else: 
-            self.sim_case.TurbineGov.set(
-                src='uomega0', idx=self.tg_idx, value=0, attr='v')
-            coordval = 0.00
-            self.coord_record.append(coordval)
+   
+        self.sim_case.TurbineGov.set(
+            src='uomega0', idx=self.tg_idx, value=action, attr='v')
+        self.coord_record.append(action)
+
 
         # Run andes TDS to the next time and increment self.i by 1
         sim_crashed = not self.sim_to_next()
@@ -234,8 +228,7 @@ class AndesPrimaryFreqControl(gym.Env):
         if done:
             self.action_total_print = []
             for i in range(len(self.action_print)):
-                self.action_total_print.append(self.action_print[i])
-                self.action_record.append(self.action_print[i])                                               
+                self.action_total_print.append(self.action_print[i])                                              
             print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
             print("Disturbance: {}".format(self.disturbance))
@@ -265,7 +258,6 @@ class AndesPrimaryFreqControl(gym.Env):
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
-                self.best_action_record = self.action_record
                                     
                                                
         return obs, reward, done, {}
