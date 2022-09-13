@@ -100,6 +100,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # Record frequency of best episode
         self.best_episode_freq = []
         self.action_record = []
+        self.best_action_record = []
         self.coord_record = []
         self.best_coord_record = []
         
@@ -264,6 +265,7 @@ class AndesPrimaryFreqControl(gym.Env):
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
+                self.best_action_record = self.action_record
                                     
                                                
         return obs, reward, done, {}
