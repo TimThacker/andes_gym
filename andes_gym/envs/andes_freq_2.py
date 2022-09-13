@@ -101,7 +101,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
-        self.simtimes = []
+
         
 
     def seed(self, seed=None):
