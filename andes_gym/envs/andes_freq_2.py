@@ -185,7 +185,7 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # apply control for current step
        
-        if self.sim_case.dae.ts.t > 3:
+        if self.i > 15:
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=action, attr='v')
             self.coord_record.append(action)
