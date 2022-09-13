@@ -99,6 +99,9 @@ class AndesPrimaryFreqControl(gym.Env):
         self.best_reward = -10000
         # Record frequency of best episode
         self.best_episode_freq = []
+        self.action_record = []
+        self.coord_record = []
+        self.best_coord_record = []
         
 
     def seed(self, seed=None):
@@ -142,13 +145,10 @@ class AndesPrimaryFreqControl(gym.Env):
         assert self.sim_to_next(), "First simulation step failed"
 
         self.freq_print = []
-        self.action_0_print = []
-        self.action_1_print = []
-        self.action_2_print = []
-        self.action_3_print = []
-        self.action_4_print = []
+        self.action_print = []
         self.reward_print = []
         self.episode_freq = []
+        self.coord_record = []
 
     def sim_to_next(self):
         """
@@ -188,9 +188,11 @@ class AndesPrimaryFreqControl(gym.Env):
         if np.any(self.sim_case.dae.ts.t) < 3:
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=action, attr='v')
+                self.coord_record.append(action)
         else: 
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=0, attr='v')
+                self.coord_record.append(0)
 
         # Run andes TDS to the next time and increment self.i by 1
         sim_crashed = not self.sim_to_next()
@@ -224,26 +226,15 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # add the first frequency value to `self.freq_print`
         self.freq_print.append(freq[0])
-        self.action_0_print.append(action[0])
-        self.action_1_print.append(action[1])
-        self.action_2_print.append(action[2])
-        self.action_3_print.append(action[3])
-        self.action_4_print.append(action[4])
+        self.action_print.append(action)
         self.reward_print.append(reward)
 
         if done:
             self.action_total_print = []
-            for i in range(len(self.action_0_print)):
-                self.action_total_print.append(self.action_0_print[i]
-                                               + self.action_1_print[i]
-                                               + self.action_2_print[i]
-                                               + self.action_3_print[i]
-                                               + self.action_4_print[i])
-            print("Action #0: {}".format(self.action_0_print))
-            print("Action #1: {}".format(self.action_1_print))
-            print("Action #2: {}".format(self.action_2_print))
-            print("Action #3: {}".format(self.action_3_print))
-            print("Action #4: {}".format(self.action_4_print))
+            for i in range(len(self.action_print)):
+                self.action_total_print.append(self.action_print[i])
+                self.action_record.append(self.action_print[i])                                               
+            print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
             print("Disturbance: {}".format(self.disturbance))
             print("Freq on #0: {}".format(self.freq_print))
@@ -271,7 +262,9 @@ class AndesPrimaryFreqControl(gym.Env):
                 self.best_reward = sum(self.reward_print)
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
-
+                self.best_coord_record = self.coord_record
+                                    
+                                               
         return obs, reward, done, {}
 
     def render(self, mode='human'):
