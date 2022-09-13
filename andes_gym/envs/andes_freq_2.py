@@ -188,11 +188,11 @@ class AndesPrimaryFreqControl(gym.Env):
         if np.any(self.sim_case.dae.ts.t) < 3:
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=action, attr='v')
-                self.coord_record.append(action)
+            self.coord_record.append(action)
         else: 
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=0, attr='v')
-                self.coord_record.append(0)
+            self.coord_record.append(0)
 
         # Run andes TDS to the next time and increment self.i by 1
         sim_crashed = not self.sim_to_next()
