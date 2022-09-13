@@ -101,6 +101,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
+        self.simtimes = []
         
 
     def seed(self, seed=None):
@@ -183,7 +184,7 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # apply control for current step
-
+        self.simtimes.append(self.sim_case.dae.t)
    
         self.sim_case.TurbineGov.set(
             src='uomega0', idx=self.tg_idx, value=action, attr='v')
