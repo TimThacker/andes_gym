@@ -185,10 +185,10 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # apply control for current step
 
-        if np.any(self.sim_case.dae.ts.t) < 3
+        if np.any(self.sim_case.dae.ts.t) < 3:
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=action, attr='v')
-        else 
+        else: 
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=0, attr='v')
 
