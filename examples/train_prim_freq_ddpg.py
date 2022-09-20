@@ -23,15 +23,6 @@ for id in range(1):
     
     print("training {} completed using {}".format(id, time.time() - time_start))
 
-    model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
-    freq = pd.DataFrame(env.final_freq)
-    freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
-    freqRec = pd.DataFrame(env.best_episode_freq)
-    freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
-    coord_record = pd.DataFrame(env.best_coord_record)
-    coord_record.to_csv(save_dir + "andes_primfreq_ddpg_coord_{}.csv".format(id), index=False)
-
-
     obs = env.reset()
     done = False
     while True:
@@ -39,6 +30,18 @@ for id in range(1):
         obs, rewards, done, info = env.step(action)
         if done is True:
             break
+            
+            
+    model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
+    freq = pd.DataFrame(env.final_freq)
+    freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
+    freqRec = pd.DataFrame(env.best_episode_freq)
+    freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
+    coord_record = pd.DataFrame(env.best_coord_record)
+    coord_record.to_csv(save_dir + "andes_primfreq_ddpg_coord_{}.csv".format(id), index=False)
+    
+    
+    
     plt.rcParams.update({'font.family': 'Arial'})
     plt.figure(figsize=(9, 7))
     plt.plot(env.final_freq, color='blue', alpha=1, linewidth=2)
