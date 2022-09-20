@@ -90,6 +90,14 @@ class AndesFreqControl(gym.Env):
 
         # record the final frequency
         self.final_freq = []
+        # Record frequency of episode
+
+        self.best_episode = None
+        # Record best reward
+        self.best_reward = -10000
+        # Record frequency of best episode
+        self.coord_record = []
+        self.best_coord_record = []
 
     def seed(self, seed=None):
         """
@@ -175,6 +183,7 @@ class AndesFreqControl(gym.Env):
         # apply control for current step
         self.sim_case.TurbineGov.set(
             src='paux0', idx=self.tg_idx, value=action, attr='v')
+        self.coord_record.append(action)
 
         # Run andes TDS to the next time and increment self.i by 1
         sim_crashed = not self.sim_to_next()
@@ -245,6 +254,12 @@ class AndesFreqControl(gym.Env):
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
+            
+            if sum(self.reward_print) > self.best_reward:
+                self.best_reward = sum(self.reward_print)
+                #self.best_episode = self.XXXX
+                self.best_episode_freq = self.final_obs_render
+                self.best_coord_record = self.coord_record
 
 
         return obs, reward, done, {}
