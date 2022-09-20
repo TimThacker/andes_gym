@@ -32,7 +32,7 @@ model.learn(total_timesteps=2000)  # we need to change the total steps with acti
 print("training {} completed using {}".format(id, time.time() - time_start))
 
 coord_record = pd.DataFrame(env.best_coord_record)
-coord_record.to_csv(save_dir + "andes_coord_obs_{}.csv".format(id), index=False)
+coord_record.to_csv(save_dir + "andes_coord_obs_{}.csv".format(1), index=False)
 
 obs = env.reset()
 done = False
