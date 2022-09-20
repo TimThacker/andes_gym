@@ -189,10 +189,10 @@ class AndesPrimaryFreqControl(gym.Env):
             self.sim_case.TurbineGov.set(
                 src='uomega0', idx=self.tg_idx, value=action, attr='v')
             self.coord_record.append(action)
-        else: 
-            self.sim_case.TurbineGov.set(
-                src='uomega0', idx=self.tg_idx, value=0, attr='v')
-            self.coord_record.append(np.zeros(self.N_Gov))
+       # else: 
+         #   self.sim_case.TurbineGov.set(
+          #      src='uomega0', idx=self.tg_idx, value=0, attr='v')
+          #  self.coord_record.append(np.zeros(self.N_Gov))
 
 
         # Run andes TDS to the next time and increment self.i by 1
