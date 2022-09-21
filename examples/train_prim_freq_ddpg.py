@@ -16,7 +16,7 @@ save_dir = "C:/Users/tntth/andes_gym/examples/delay_learning_200_action_75_Prima
 for id in range(1):
     env = gym.make('AndesPrimaryFreqControl-v0')
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])  # kwargs == keyword arguments
-    model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, learning_starts=100)
+    model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, learning_starts=0)
 
     time_start = time.time()
     model.learn(total_timesteps=2000)  # we need to change the total steps with action numbers
