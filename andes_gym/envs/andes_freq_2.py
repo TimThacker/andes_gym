@@ -218,7 +218,7 @@ class AndesPrimaryFreqControl(gym.Env):
             reward -= np.sum(np.abs(3000 * (freq - .994712453)))
         else:
             reward -= np.sum(np.abs(100 * (freq - .994712453)))
-            
+            reward += np.sum(100 * (freq - 0.994))
         #if np.sum(freq - 1.01) > 0:
             #reward -= 200
 
