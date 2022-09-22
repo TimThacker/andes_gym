@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import time
 import torch
 from stable_baselines3.ddpg.policies import MlpPolicy
+from stable_baselines3.common.noise import NormalActionNoise
 from stable_baselines3 import DDPG
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
