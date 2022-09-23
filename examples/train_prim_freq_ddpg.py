@@ -47,7 +47,7 @@ for id in range(1):
     
     plt.rcParams.update({'font.family': 'Arial'})
     plt.figure(figsize=(9, 7))
-    plt.plot(env.final_freq, color='blue', alpha=1, linewidth=2)
+    plt.plot(env.episode_reward, color='blue', alpha=1, linewidth=2)
     plt.xlabel("Episode", fontsize=20)
     plt.ylabel("Frequency (Hz)", fontsize=20)
     plt.grid()
@@ -67,7 +67,6 @@ for id in range(1):
     ax.ticklabel_format(useOffset=False)
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.final_obs_render[:, i] * 60)
-    plt.savefig("fig_primfreq_dynamics.pdf")
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
     plt.savefig("fig_primfreq_dynamics_best.pdf")
