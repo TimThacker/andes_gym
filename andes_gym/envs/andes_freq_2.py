@@ -246,7 +246,8 @@ class AndesPrimaryFreqControl(gym.Env):
 
             # record the final frequency
             self.final_freq.append(self.freq_print[-1] * 60)
-            self.episode_reward.append(sum(self.reward_print))            
+            if sum(self.reward_print) < 10000:
+                self.episode_reward.append(sum(self.reward_print))            
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
