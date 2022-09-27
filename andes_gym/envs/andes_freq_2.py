@@ -67,7 +67,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-0.1, high=1, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-2, high=2, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-2, high=2, shape=(self.N_Gov,))
 
         self.i = 0  # index of the current action
@@ -185,11 +185,11 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # apply control for current step
-       
+       coordsig=action/100
         #if self.i < 30:
         self.sim_case.TurbineGov.set(
-            src='uomega0', idx=self.tg_idx, value=action, attr='v')
-        self.coord_record.append(action)
+            src='uomega0', idx=self.tg_idx, value=coordsig attr='v')
+        self.coord_record.append(coordsig)
        # else: 
          #   self.sim_case.TurbineGov.set(
           #      src='uomega0', idx=self.tg_idx, value=0, attr='v')
