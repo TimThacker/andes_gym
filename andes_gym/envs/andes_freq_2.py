@@ -67,7 +67,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-0.02, high=.5, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-0.05, high=.5, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-2, high=2, shape=(self.N_Gov,))
 
         self.i = 0  # index of the current action
@@ -187,12 +187,12 @@ class AndesPrimaryFreqControl(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         coordsig=action
-        if self.i < 30:
-            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
-            self.coord_record.append(coordsig)
-        else: 
-            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=0, attr='v')
-            self.coord_record.append(np.zeros(self.N_Gov))
+        #if self.i < 30:
+        self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+        self.coord_record.append(coordsig)
+        #else: 
+           # self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=0, attr='v')
+            #self.coord_record.append(np.zeros(self.N_Gov))
 
 
         # Run andes TDS to the next time and increment self.i by 1
