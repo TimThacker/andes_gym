@@ -20,10 +20,10 @@ for id in range(1):
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.3 * np.ones(n_actions))
     train_freq = (1,"step")
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])  # kwargs == keyword arguments
-    model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=0)
+    model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, random_exploration = 0.1, learning_starts=100)
 
     time_start = time.time()
-    model.learn(total_timesteps=1000)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=100000)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
 
