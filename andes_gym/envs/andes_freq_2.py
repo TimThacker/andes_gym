@@ -188,12 +188,10 @@ class AndesPrimaryFreqControl(gym.Env):
         #coordsig=action*(1/100)
         coordsig=action
         if self.i < 30:
-        self.sim_case.TurbineGov.set(
-            src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
-        self.coord_record.append(coordsig)
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+            self.coord_record.append(coordsig)
         else: 
-            self.sim_case.TurbineGov.set(
-                src='uomega0', idx=self.tg_idx, value=0, attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=0, attr='v')
             self.coord_record.append(np.zeros(self.N_Gov))
 
 
