@@ -61,14 +61,14 @@ class AndesPrimaryFreqControl(gym.Env):
         # we need to let the agent to observe the disturbed trajectory before any actions taken,
         # therefore the following instant sequence is not correct: np.array([0.1, 5, 10]).
         # Instead, we will use this instant sequence: np.array([5,..., 10])
-        self.action_instants = np.linspace(0.1, 30, 150)
+        self.action_instants = np.linspace(0.1, 30, 100)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-0.05, high=.5, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-2, high=2, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-0.05, high=.2, shape=(self.N_Gov,))
+        self.observation_space = spaces.Box(low=-0.5, high=0.5, shape=(self.N_Gov,))
 
         self.i = 0  # index of the current action
 
