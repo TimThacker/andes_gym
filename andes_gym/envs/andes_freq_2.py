@@ -192,7 +192,7 @@ class AndesPrimaryFreqControl(gym.Env):
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
-            coordsig = 0
+            coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
 
