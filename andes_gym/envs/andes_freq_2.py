@@ -61,7 +61,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # we need to let the agent to observe the disturbed trajectory before any actions taken,
         # therefore the following instant sequence is not correct: np.array([0.1, 5, 10]).
         # Instead, we will use this instant sequence: np.array([5,..., 10])
-        self.action_instants = np.linspace(0.1, 30, 30)
+        self.action_instants = np.linspace(0.1, 30, 150)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
@@ -127,7 +127,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        self.disturbance = 0.2 ## random.uniform(0.2, 0.5)
+        self.disturbance = 0.1 ## random.uniform(0.2, 0.5)
         # self.disturbance = random.uniform(0.2, 0.5)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
@@ -186,13 +186,15 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # apply control for current step
         #coordsig=action*(1/100)
-        coordsig=action
-        #if self.i < 30:
-        self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
-        self.coord_record.append(coordsig)
-        #else: 
-           # self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=0, attr='v')
-            #self.coord_record.append(np.zeros(self.N_Gov))
+        
+        if self.i < 30:
+            coordsig=action
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+            self.coord_record.append(coordsig)
+        else:
+            coordsig = 0
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+            self.coord_record.append(coordsig)
 
 
         # Run andes TDS to the next time and increment self.i by 1
