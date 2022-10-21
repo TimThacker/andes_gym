@@ -51,7 +51,7 @@ class AndesPrimaryFreqControl(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM.xlsx")
+        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM_equalM.xlsx")
 
         self.tf = 30.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -67,7 +67,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-0.05, high=.1, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=0, high=.15, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_Gov,))
 
         self.i = 0  # index of the current action
