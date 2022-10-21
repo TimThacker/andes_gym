@@ -23,9 +23,17 @@ for id in range(1):
     model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=1000)
 
     time_start = time.time()
-    model.learn(total_timesteps=20000)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=2000)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
+    
+    model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
+    freq = pd.DataFrame(env.final_freq)
+    freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
+    freqRec = pd.DataFrame(env.best_episode_freq)
+    freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
+    coord_record = pd.DataFrame(env.best_coord_record)
+    coord_record.to_csv(save_dir + "andes_primfreq_ddpg_coord_{}.csv".format(id), index=False)
 
     obs = env.reset()
     done = False
@@ -36,13 +44,7 @@ for id in range(1):
             break
             
             
-    model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
-    freq = pd.DataFrame(env.final_freq)
-    freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
-    freqRec = pd.DataFrame(env.best_episode_freq)
-    freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
-    coord_record = pd.DataFrame(env.best_coord_record)
-    coord_record.to_csv(save_dir + "andes_primfreq_ddpg_coord_{}.csv".format(id), index=False)
+
     
     
     
