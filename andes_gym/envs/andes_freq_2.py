@@ -51,7 +51,7 @@ class AndesPrimaryFreqControl(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM_alt_inertia.xlsx")
+        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM.xlsx")
 
         self.tf = 30.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -61,7 +61,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # we need to let the agent to observe the disturbed trajectory before any actions taken,
         # therefore the following instant sequence is not correct: np.array([0.1, 5, 10]).
         # Instead, we will use this instant sequence: np.array([5,..., 10])
-        self.action_instants = np.linspace(0.1, 30, 30)
+        self.action_instants = np.linspace(0.1, 30, 10)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
