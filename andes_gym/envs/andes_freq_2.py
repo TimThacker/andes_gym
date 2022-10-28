@@ -188,8 +188,8 @@ class AndesPrimaryFreqControl(gym.Env):
         #coordsig=action*(1/100)
         
         if self.i < 10:
-            #coordsig=action
-            coordsig = np.zeros(self.N_Gov)
+            coordsig=action
+            #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
@@ -225,7 +225,7 @@ class AndesPrimaryFreqControl(gym.Env):
         if np.any(freq < 0.994712453):
             reward -= np.sum(1000 * (.994712453 - freq))
         if np.any(freq > 1):
-            reward -= np.sum(50 * (freq - 1))
+            reward -= np.sum(1000 * (freq - 1))
             #reward += np.sum(100 * (freq - 0.994))
         #if np.sum(freq - 1.01) > 0:
             #reward -= 200
