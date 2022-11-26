@@ -6,6 +6,7 @@ This file was part of gym-power and is now part of andes_gym.
 Authors:
 Hantao Cui (cuihantao@gmail.com)
 Yichen Zhang (whoiszyc@live.com)
+Timothy Thacker (tnt.thacker@gmail.com)
 
 Modification and redistribution of this file is subject to a collaboration agreement.
 Derived source code should be made available to all authors.
@@ -26,10 +27,10 @@ from gym.utils import seeding
 
 class AndesPrimaryFreqControl(gym.Env):
     """
-    Load frequency control environment using ANDES.
+    Primary Frequency Control Environment using ANDES.
 
-    This environment simulates the 2-machine, 5-bus system in ANDES
-    with random load ramp disturbance. The duration of simulation is 50s.
+    This environment simulates the IEEE 14-Bus System in ANDES
+    with random or set load ramp disturbance. 
 
     Observation:
         Bus Frequency
@@ -37,7 +38,9 @@ class AndesPrimaryFreqControl(gym.Env):
 
     Action:
         Discrete action every T seconds.
-        Activation of the action will adjust the `pin` of `TG1` at action instants
+        Activation of the action will adjust the `uomega0` of `TurbinGov` at action instants
+        
+        The governer ferquency reference is set to the action value
 
     Reward:
         Based on the frequency at the action instants
@@ -61,6 +64,13 @@ class AndesPrimaryFreqControl(gym.Env):
         # we need to let the agent to observe the disturbed trajectory before any actions taken,
         # therefore the following instant sequence is not correct: np.array([0.1, 5, 10]).
         # Instead, we will use this instant sequence: np.array([5,..., 10])
+        
+        # It is realistic to assume some time delay between power imbalance event and
+        # identification of the frequency deviation. Thus, action application is delayed
+        # by some small amount.
+        
+        # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
+        
         self.action_instants = np.linspace(1, 30, 30)
 
         self.N = len(self.action_instants)  # number of actions
@@ -70,6 +80,9 @@ class AndesPrimaryFreqControl(gym.Env):
         self.action_space = spaces.Box(low=-0.01, high=.03, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_Gov,))
 
+        # This code is executed by the index of the action applications, rather than
+        # the time domain simulation time step from ANDES.
+        
         self.i = 0  # index of the current action
 
         self.seed()
