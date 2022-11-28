@@ -101,15 +101,14 @@ class AndesPrimaryFreqControl(gym.Env):
         self.action_print = []
         self.reward_print = []
 
-        # record the final frequency
-        self.final_freq = []
+        # record the episode reward
         self.episode_reward = []
         
         # Record frequency of episode
         self.episode_freq = []
         # Record episode of highest reward
         self.best_episode = None
-        # Record best reward
+        # Record best reward, this will be overwritten by anything better
         self.best_reward = -10000
         # Record frequency of best episode
         self.best_episode_freq = []
@@ -117,7 +116,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.best_coord_record = []
 
         
-
+    
     def seed(self, seed=None):
         """
         Generate the amount of load disturbance
@@ -140,7 +139,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        self.disturbance = 0.1 ## random.uniform(0.2, 0.5)
+        self.disturbance = 0.1 
         # self.disturbance = random.uniform(0.2, 0.5)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
@@ -153,7 +152,6 @@ class AndesPrimaryFreqControl(gym.Env):
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
 
         self.action_last = np.zeros(self.N_Gov)
-        # TODO: add the load disturbance model
 
         # Step to the first action instant
         assert self.sim_to_next(), "First simulation step failed"
@@ -228,7 +226,6 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # reward functions
-        # reward -= np.sum(np.abs(2 * 100 * action))
 
         if not sim_crashed and done:
             reward -= np.sum(np.abs(3000 * (freq - .994712453)))
@@ -239,9 +236,6 @@ class AndesPrimaryFreqControl(gym.Env):
             reward -= np.sum(1000 * (.994712453 - freq))
         if np.any(freq > 1):
             reward -= np.sum(1000 * (freq - 1))
-            #reward += np.sum(100 * (freq - 0.994))
-        #if np.sum(freq - 1.01) > 0:
-            #reward -= 200
 
         # store last action
         self.action_last = action
@@ -259,13 +253,10 @@ class AndesPrimaryFreqControl(gym.Env):
             print("Action Total: {}".format(self.action_total_print))
             print("Disturbance: {}".format(self.disturbance))
             print("Freq on #0: {}".format(self.freq_print))
-            print("Freq postfault: {}".format(self.freq_print[0] * 60))
-            print("Freq after control: {}".format(self.freq_print[-1] * 60))
-            print("Rewards: {}".format(self.reward_print))
+            #print("Rewards: {}".format(self.reward_print))
             print("Total Rewards: {}".format(sum(self.reward_print)))
 
-            # record the final frequency
-            self.final_freq.append(self.freq_print[-1] * 60)
+            # record the episode reward
             self.episode_reward.append(sum(self.reward_print))            
 
             # store data for rendering. To workwround automatic resetting by VecEnv
@@ -315,7 +306,7 @@ class AndesPrimaryFreqControl(gym.Env):
             self.ax.ticklabel_format(useOffset=False)
 
         for i in range(self.N_Bus):
-            self.ax.plot(self.t_render, self.final_obs_render[:, i]*60)
+            self.ax.plot(self.t_render, self.best_episode_freq[:, i]*60)
 
         self.fig.canvas.draw()
 
