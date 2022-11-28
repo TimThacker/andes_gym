@@ -12,7 +12,7 @@ from stable_baselines3 import DDPG
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
-save_dir = "C:/Users/tntth/andes_gym/examples/delay_learning_200_action_75_Primary/"
+save_dir = "C:/Users/tntth/andes_gym/examples/DDPG_data_ls_200/"
 
 for id in range(1):
     env = gym.make('AndesPrimaryFreqControl-v0')
@@ -27,9 +27,7 @@ for id in range(1):
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
-    model.save(save_dir + "andes_primfreq_ddpg_fix_{}.pkl".format(id))
-    freq = pd.DataFrame(env.final_freq)
-    freq.to_csv(save_dir + "andes_primfreq_ddpg_fix_{}.csv".format(id), index=False)
+    model.save(save_dir + "andes_primfreq_ddpg_model_{}.pkl".format(id))
     freqRec = pd.DataFrame(env.best_episode_freq)
     freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
     coord_record = pd.DataFrame(env.best_coord_record)
@@ -43,9 +41,6 @@ for id in range(1):
         if done is True:
             break
             
-            
-
-    
     
     
     plt.rcParams.update({'font.family': 'Arial'})
@@ -58,7 +53,7 @@ for id in range(1):
     plt.yticks(fontsize=20)
     plt.title("Episode", fontsize=16)
     plt.tight_layout()
-    plt.savefig(save_dir + "andes_primfreq_ddpg_fix_{}.png".format(id))
+    plt.savefig(save_dir + "andes_primfreq_ddpg_rewards_{}.png".format(id))
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(1, 1, 1)
     ax.set_xlim(left=0, right=np.max(env.t_render))
@@ -68,8 +63,6 @@ for id in range(1):
     ax.set_xlabel("Time [s]", fontsize=16)
     ax.set_ylabel("Bus Frequency [Hz]", fontsize=16)
     ax.ticklabel_format(useOffset=False)
-    for i in range(env.N_Bus):
-        ax.plot(env.t_render, env.final_obs_render[:, i] * 60)
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
     plt.savefig("fig_primfreq_dynamics_best.pdf")
