@@ -14,6 +14,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
 save_dir = "C:/Users/tntth/andes_gym/examples/DDPG_data_ls_200_test/"
 
+# Change the range size to train a larger number of models.
 for id in range(1):
     env = gym.make('AndesPrimaryFreqControl-v0')
     n_actions = env.action_space.shape[-1]
