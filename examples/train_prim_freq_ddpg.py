@@ -14,7 +14,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
 save_dir = "C:/Users/tntth/andes_gym/examples/DDPG_data_ls_200/"
 
-for id in range(1):
+for id in range(9):
     env = gym.make('AndesPrimaryFreqControl-v0')
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
@@ -23,7 +23,7 @@ for id in range(1):
     model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=200)
 
     time_start = time.time()
-    model.learn(total_timesteps=500)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=5000)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
