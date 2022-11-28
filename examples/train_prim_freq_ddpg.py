@@ -12,9 +12,9 @@ from stable_baselines3 import DDPG
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
-save_dir = "C:/Users/tntth/andes_gym/examples/DDPG_data_ls_200/"
+save_dir = "C:/Users/tntth/andes_gym/examples/DDPG_data_ls_200_test/"
 
-for id in range(9):
+for id in range(1):
     env = gym.make('AndesPrimaryFreqControl-v0')
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
@@ -23,7 +23,7 @@ for id in range(9):
     model = DDPG(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=200)
 
     time_start = time.time()
-    model.learn(total_timesteps=5000)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=500)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
@@ -32,6 +32,8 @@ for id in range(9):
     freqRec.to_csv(save_dir + "andes_primfreq_ddpg_sim_{}.csv".format(id), index=False)
     coord_record = pd.DataFrame(env.best_coord_record)
     coord_record.to_csv(save_dir + "andes_primfreq_ddpg_coord_{}.csv".format(id), index=False)
+    totalRewards = pd.DataFrame(env.episode_reward)
+    totalRewards.to_csv(save_dir + "andes_primfreq_ddpg_episodeRewards_{}.csv".format(id), index=False)
 
     obs = env.reset()
     done = False
