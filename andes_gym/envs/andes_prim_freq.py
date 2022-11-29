@@ -54,7 +54,7 @@ class AndesPrimaryFreqControl(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM.xlsx")
+        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM_full.xlsx")
 
         self.tf = 30.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
