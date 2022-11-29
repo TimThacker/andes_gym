@@ -71,7 +71,7 @@ class AndesPrimaryFreqControl(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(1, 30, 30)
+        self.action_instants = np.linspace(1, 30, 150)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
@@ -198,7 +198,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i < 10:
+        if self.i < 75:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
