@@ -49,7 +49,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         path = pathlib.Path(__file__).parent.absolute()
         self.path = os.path.join(path, "WECC_full_ieeeg1m.xlsx")
 
-        self.tf = 120.0     # end of simulation time
+        self.tf = 100.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
         self.fixt = True   # if we do fixed step integration
         self.no_pbar = True
@@ -64,7 +64,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(1, 30, 150)
+        self.action_instants = np.linspace(1, 100, 3000)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 29  # number of IEEEG1M models
@@ -91,6 +91,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.final_obs_render = None
 
         self.freq_print = []
+        self.coi_print = []
         self.action_print = []
         self.reward_print = []
 
@@ -99,12 +100,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         
         # Record frequency of episode
         self.episode_freq = []
+        self.episode_coi = []
         # Record episode of highest reward
         self.best_episode = None
         # Record best reward, this will be overwritten by anything better
         self.best_reward = -10000
         # Record frequency of best episode
         self.best_episode_freq = []
+        self.best_episode_coi = []
         self.coord_record = []
         self.best_coord_record = []
 
@@ -150,10 +153,13 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         assert self.sim_to_next(), "First simulation step failed"
 
         self.freq_print = []
+        self.coi_print = []
         self.action_print = []
         self.reward_print = []
         self.episode_freq = []
+        self.episode_coi = []
         self.coord_record = []
+        
 
     def sim_to_next(self):
         """
@@ -191,7 +197,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i < 75:
+        if self.i < 500:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
@@ -207,6 +213,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # get frequency and ROCOF data
         freq = self.sim_case.dae.x[self.w]
+        coi = self.sim_case.COI.omega
 
         # --- Temporarily disable ROCOF ---
         # rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
@@ -221,12 +228,12 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # reward functions
 
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - .994712453)))
+            reward -= np.sum(np.abs(3000 * (freq - .99992)))
         else:
-            reward -= np.sum(np.abs(50 * (freq - .994712453)))
+            reward -= np.sum(np.abs(50 * (freq - .99992)))
             
-        if np.any(freq < 0.994712453):
-            reward -= np.sum(1000 * (.994712453 - freq))
+        if np.any(freq < 0.99992):
+            reward -= np.sum(1000 * (.99992 - freq))
         if np.any(freq > 1):
             reward -= np.sum(1000 * (freq - 1))
 
@@ -235,6 +242,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # add the first frequency value to `self.freq_print`
         self.freq_print.append(freq[0])
+        self.COI_print.append(coi[0])
         self.action_print.append(action)
         self.reward_print.append(reward)
 
@@ -245,7 +253,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
             print("Disturbance: {}".format(self.disturbance))
-            print("Freq on #0: {}".format(self.freq_print))
+            print("COI Freq on #0: {}".format(self.coi_print))
             #print("Rewards: {}".format(self.reward_print))
             print("Total Rewards: {}".format(sum(self.reward_print)))
 
@@ -267,6 +275,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 self.best_reward = sum(self.reward_print)
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
+                self.best_episode_coi = coi
                 self.best_coord_record = self.coord_record
                                     
                                                
