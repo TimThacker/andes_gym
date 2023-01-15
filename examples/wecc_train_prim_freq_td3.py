@@ -12,7 +12,7 @@ from stable_baselines3 import TD3
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
-save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
+save_dir = "C:/Users/tntth/andes_gym/examples/WECC/TD3_data_ls_200_test/"
 
 # Change the range size to train a larger number of models.
 for id in range(1):
