@@ -31,6 +31,8 @@ for id in range(1):
     model.save(save_dir + "wecc_andes_primfreq_td3_model_{}.pkl".format(id))
     freqRec = pd.DataFrame(env.best_episode_freq)
     freqRec.to_csv(save_dir + "wecc_andes_primfreq_td3_sim_{}.csv".format(id), index=False)
+    coiRec = pd.DataFrame(env.best_episode_coi)
+    coiRec.to_csv(save_dir + "wecc_andes_primfreq_td3_sim_{}.csv".format(id), index=False)
     coord_record = pd.DataFrame(env.best_coord_record)
     coord_record.to_csv(save_dir + "wecc_andes_primfreq_td3_coord_{}.csv".format(id), index=False)
     totalRewards = pd.DataFrame(env.episode_reward)
