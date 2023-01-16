@@ -135,7 +135,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        self.disturbance = 1.0
+        self.disturbance = 0
         # self.disturbance = random.uniform(0.2, 0.5)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
