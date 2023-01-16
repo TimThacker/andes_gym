@@ -242,7 +242,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # add the first frequency value to `self.freq_print`
         self.freq_print.append(freq[0])
-        self.coi_print.append(coi[0])
+        #self.coi_print.append(coi[0])
         self.action_print.append(action)
         self.reward_print.append(reward)
 
