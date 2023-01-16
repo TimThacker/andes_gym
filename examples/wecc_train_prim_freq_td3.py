@@ -70,7 +70,7 @@ for id in range(1):
     ax.ticklabel_format(useOffset=False)
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
-    plt.savefig(save_dir + "wecc_fig_primfreq_dynamics_best.pdf")
+    plt.savefig(save_dir + "wecc_fig_primfreq_dynamics_best.pdf".format(id))
     
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(1, 1, 1)
@@ -82,6 +82,6 @@ for id in range(1):
     ax.set_ylabel("Bus Frequency COI [Hz]", fontsize=16)
     ax.ticklabel_format(useOffset=False)
     ax.plot(env.t_render, env.best_episode_coi * 60)
-    plt.savefig(save_dir + "wecc_fig_primfreq_coi.pdf")
+    plt.savefig(save_dir + "wecc_fig_primfreq_coi.pdf".format(id))
 
     
