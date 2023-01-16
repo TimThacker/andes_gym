@@ -181,7 +181,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
         self.freq_print.append(freq[0])
-        coi = self.COI.omega
+        coi = self.sim_case.COI.omega
         return freq, coi
 
     def step(self, action):
