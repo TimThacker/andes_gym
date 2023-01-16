@@ -144,6 +144,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
+        self.coi = np.array(self.sim_case.COI.omega.a)
         # self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
 
@@ -180,7 +181,8 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
         self.freq_print.append(freq[0])
-        return freq
+        coi = self.COI.omega
+        return freq, coi
 
     def step(self, action):
         """
@@ -228,12 +230,12 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # reward functions
 
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - .99992)))
+            reward -= np.sum(np.abs(3000 * (freq - .9999551)))
         else:
-            reward -= np.sum(np.abs(50 * (freq - .99992)))
+            reward -= np.sum(np.abs(50 * (freq - 0.9999551)))
             
-        if np.any(freq < 0.99992):
-            reward -= np.sum(1000 * (.99992 - freq))
+        if np.any(freq < 0.9999551):
+            reward -= np.sum(1000 * (0.9999551 - freq))
         if np.any(freq > 1):
             reward -= np.sum(1000 * (freq - 1))
 
@@ -242,7 +244,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # add the first frequency value to `self.freq_print`
         self.freq_print.append(freq[0])
-        #self.coi_print.append(coi[0])
+        self.coi_print.append(coi[0])
         self.action_print.append(action)
         self.reward_print.append(reward)
 
@@ -269,13 +271,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
+            self.coi = self.sim_case.COI.omega
             
             
             if sum(self.reward_print) > self.best_reward:
                 self.best_reward = sum(self.reward_print)
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
-                self.best_episode_coi = coi
+                self.best_episode_coi = self.coi
                 self.best_coord_record = self.coord_record
                                     
                                                
