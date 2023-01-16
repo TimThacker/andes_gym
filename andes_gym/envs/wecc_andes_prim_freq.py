@@ -134,10 +134,13 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.sim_case.PQ.config.q2i = 0
         self.sim_case.TDS.init()
 
-        # random or fixed disturbance
+        # random or fixed disturbance magnitude
         self.disturbance = 1.0
         # self.disturbance = random.uniform(0.2, 0.5)
         self.sim_case.Alter.amount.v[0] = self.disturbance
+        
+        # random or fixed disturbance location
+        self.sim_case.Alter.dev.v[0] = 'PQ_'+str(random.randint(1,104))
 
         # configurations
         self.sim_case.TDS.config.fixt = self.fixt
