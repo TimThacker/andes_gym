@@ -64,7 +64,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(1, 100, 300)
+        self.action_instants = np.linspace(1, 100, 200)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 29  # number of IEEEG1M models
@@ -234,9 +234,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             reward -= np.sum(np.abs(50 * (freq - 0.9999551)))
             
         if np.any(freq < 0.9999551):
-            reward -= np.sum(1000 * (0.9999551 - freq))
+            reward -= np.sum(np.abs(1000 * (0.9999551 - freq)))
         if np.any(freq > 1):
-            reward -= np.sum(1000 * (freq - 1))
+            reward -= np.sum(np.abs(1000 * (freq - 1)))
 
         # store last action
         self.action_last = action
