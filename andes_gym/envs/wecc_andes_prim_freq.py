@@ -181,7 +181,6 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
         self.freq_print.append(freq[0])
-        coi = self.sim_case.COI.omega
         return freq
 
     def step(self, action):
@@ -215,7 +214,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # get frequency and ROCOF data
         freq = self.sim_case.dae.x[self.w]
-        coi = self.sim_case.COI.omega
+        #coi = self.sim_case.dae.ts.y[:,self.coi]
 
         # --- Temporarily disable ROCOF ---
         # rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
@@ -255,7 +254,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
             print("Disturbance: {}".format(self.disturbance))
-            print("COI Freq on #0: {}".format(self.coi_print))
+            #print("COI Freq on #0: {}".format(self.coi_print))
             #print("Rewards: {}".format(self.reward_print))
             print("Total Rewards: {}".format(sum(self.reward_print)))
 
@@ -264,14 +263,15 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
-
+            coi_idx = self.coi
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
             ydata = self.sim_case.dae.ts.x[:, widx]
+            coidata = self.sim_case.dae.ts.y[:, coi_idx]
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
-            self.coi = self.sim_case.COI.omega
+            self.coi = np.array(coidata)
             
             
             if sum(self.reward_print) > self.best_reward:
