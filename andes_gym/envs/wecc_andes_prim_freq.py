@@ -64,7 +64,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(1, 100, 3000)
+        self.action_instants = np.linspace(1, 100, 300)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 29  # number of IEEEG1M models
@@ -135,7 +135,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        self.disturbance = 0
+        self.disturbance = 1.0
         # self.disturbance = random.uniform(0.2, 0.5)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
@@ -197,9 +197,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i < 500:
+        if self.i < 100:
             coordsig=action
-            coordsig = np.zeros(self.N_Gov)
+            #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
