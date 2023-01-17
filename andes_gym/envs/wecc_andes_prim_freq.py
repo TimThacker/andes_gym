@@ -64,7 +64,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(1, 100, 200)
+        self.action_instants = np.linspace(1, 60, 120)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 29  # number of IEEEG1M models
