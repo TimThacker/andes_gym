@@ -98,7 +98,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # record the episode reward
         self.episode_reward = []
         # record the episode's location of disturbance
-        self.episide_location = []
+        self.episode_location = []
         
         # Record frequency of episode
         self.episode_freq = []
