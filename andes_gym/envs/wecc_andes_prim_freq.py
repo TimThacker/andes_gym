@@ -143,7 +143,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         
         # random or fixed disturbance location
         dist_loc = 'PQ_'+str(random.randint(1,104))
-        self.episode_location.append = dist_loc
+        self.episode_location.append(dist_loc)
         self.sim_case.Alter.dev.v[0] = dist_loc
         
 
