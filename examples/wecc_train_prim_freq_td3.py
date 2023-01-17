@@ -31,6 +31,8 @@ for id in range(1):
     model.save(save_dir + "wecc_andes_primfreq_td3_model_{}.pkl".format(id))
     freqRec = pd.DataFrame(env.best_episode_freq)
     freqRec.to_csv(save_dir + "wecc_andes_primfreq_td3_freq_{}.csv".format(id), index=False)
+    rocofRec = pd.DataFrame(env.best_episode_rocof)
+    rocofRec.to_csv(save_dir + "wecc_andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
     coiRec = pd.DataFrame(env.best_episode_coi)
     coiRec.to_csv(save_dir + "wecc_andes_primfreq_td3_coi_{}.csv".format(id), index=False)
     locRec = pd.DataFrame(env.episode_location)
