@@ -195,7 +195,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         freq = self.sim_case.dae.x[self.w]
         rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         self.freq_print.append(freq[0])
-        self.rocof_print.append(rocof[0])
+        #self.rocof_print.append(rocof[0])
         obs = np.append(freq, rocof)
         return obs
 
