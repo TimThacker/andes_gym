@@ -97,6 +97,8 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # record the episode reward
         self.episode_reward = []
+        # record the episode's location of disturbance
+        self.episide_location = []
         
         # Record frequency of episode
         self.episode_freq = []
@@ -140,7 +142,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
-        self.sim_case.Alter.dev.v[0] = 'PQ_'+str(random.randint(1,104))
+        dist_loc = 'PQ_'+str(random.randint(1,104))
+        self.episode_location.append = dist_loc
+        self.sim_case.Alter.dev.v[0] = dist_loc
+        
 
         # configurations
         self.sim_case.TDS.config.fixt = self.fixt
