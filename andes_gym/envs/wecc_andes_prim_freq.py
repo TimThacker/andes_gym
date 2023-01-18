@@ -47,7 +47,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "WECC_full_ieeeg1m.xlsx")
+        self.path = os.path.join(path, "WECC_full_ieeeg1m_toggle.xlsx")
 
         self.tf = 100.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
