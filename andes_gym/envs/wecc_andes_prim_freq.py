@@ -139,16 +139,20 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance magnitude
-        self.disturbance = 3
+        #self.disturbance = 3
+        #self.gen_trip = 'GENROU_10'
         # self.disturbance = random.uniform(0.2, 0.5)
-        self.sim_case.Alter.amount.v[0] = self.disturbance
+        #self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
         #dist_loc = 'PQ_'+str(random.randint(1,104))
-        dist_loc = 'PQ_73'
+        dist_loc = 'GENROU_10'
+        dist_model = 'GENROU'
         self.episode_location.append(dist_loc)
-        self.sim_case.Alter.dev.v[0] = dist_loc
-        
+        #self.sim_case.Alter.dev.v[0] = dist_loc
+        self.sim_case.Toggler.dev.v[0] = dist_loc
+        self.sim_case.Toggler.model.v[0] = dist_model
+                                        
 
         # configurations
         self.sim_case.TDS.config.fixt = self.fixt
