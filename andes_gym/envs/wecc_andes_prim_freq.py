@@ -140,14 +140,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # random or fixed disturbance magnitude
         #self.disturbance = 3
-        #self.gen_trip = 'GENROU_10'
+        self.gen_trip = 'GENROU_10'
         # self.disturbance = random.uniform(0.2, 0.5)
         #self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
-        dist_loc = 'PQ_'+str(random.randint(1,104))
-        #dist_loc = 'GENROU_10'
-        dist_model = 'PQ'
+        #dist_loc = 'PQ_'+str(random.randint(1,104))
+        dist_loc = self.gen_trip
+        dist_model = 'SynGen'
         self.episode_location.append(dist_loc)
         #self.sim_case.Alter.dev.v[0] = dist_loc
         self.sim_case.Toggler.dev.v[0] = dist_loc
@@ -280,7 +280,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 self.action_total_print.append(self.action_print[i])                                              
             print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
-            print("Disturbance: {}".format(self.disturbance))
+            #print("Disturbance: {}".format(self.disturbance))
             #print("COI Freq on #0: {}".format(self.coi_print))
             #print("Rewards: {}".format(self.reward_print))
             print("Total Rewards: {}".format(sum(self.reward_print)))
