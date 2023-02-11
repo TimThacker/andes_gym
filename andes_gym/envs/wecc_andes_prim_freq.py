@@ -151,6 +151,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         dist_model = 'SynGen'
         #self.episode_location.append(dist_loc)
         #self.sim_case.Alter.dev.v[0] = dist_loc
+        self.sim_case.Toggler.t.v[0] = 0.1
         self.sim_case.Toggler.dev.v[0] = dist_loc
         self.sim_case.Toggler.model.v[0] = dist_model
                                         
