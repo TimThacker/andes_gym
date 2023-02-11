@@ -250,12 +250,12 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # reward functions
 
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - 0.99986)))
+            reward -= np.sum(np.abs(3000 * (freq - 0.9995)))
         else:
-            reward -= np.sum(np.abs(50 * (freq - 0.99986)))
+            reward -= np.sum(np.abs(50 * (freq - 0.9995)))
             
-        if np.any(freq < 0.99986):
-            reward -= np.sum(np.abs(1000 * (0.99986 - freq)))
+        if np.any(freq < 0.9995):
+            reward -= np.sum(np.abs(1000 * (0.9995 - freq)))
         if np.any(freq > 0.9999):
             reward -= np.sum(np.abs(1000 * (freq - 1)))
             
