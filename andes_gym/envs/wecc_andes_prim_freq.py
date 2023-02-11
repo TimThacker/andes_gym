@@ -47,7 +47,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "wecc_full_ieesgod_alter_testK.xlsx")
+        self.path = os.path.join(path, "wecc_full_ieesgod_toggle_testK.xlsx")
 
         self.tf = 100.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -139,19 +139,19 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance magnitude
-        self.disturbance = 3
-        #self.gen_trip = 'GENROU_10'
+        #self.disturbance = 3
+        self.gen_trip = 'GENROU_10'
         # self.disturbance = random.uniform(0.2, 0.5)
-        self.sim_case.Alter.amount.v[0] = self.disturbance
+        #self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
-        dist_loc = 'PQ_'+str(random.randint(1,104))
-        #dist_loc = self.gen_trip
-        #dist_model = 'SynGen'
-        self.episode_location.append(dist_loc)
-        self.sim_case.Alter.dev.v[0] = dist_loc
-        #self.sim_case.Toggler.dev.v[0] = dist_loc
-        #self.sim_case.Toggler.model.v[0] = dist_model
+        #dist_loc = 'PQ_'+str(random.randint(1,104))
+        dist_loc = self.gen_trip
+        dist_model = 'SynGen'
+        #self.episode_location.append(dist_loc)
+        #self.sim_case.Alter.dev.v[0] = dist_loc
+        self.sim_case.Toggler.dev.v[0] = dist_loc
+        self.sim_case.Toggler.model.v[0] = dist_model
                                         
 
         # configurations
