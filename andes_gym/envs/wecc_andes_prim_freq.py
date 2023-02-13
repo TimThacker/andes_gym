@@ -257,7 +257,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             
         if np.any(freq < 0.9995):
             reward -= np.sum(np.abs(1000 * (0.9995 - freq)))
-        if np.any(freq > 0.9999):
+        if np.any(freq > 0.9996):
             reward -= np.sum(np.abs(1000 * (freq - 1)))
             
             
