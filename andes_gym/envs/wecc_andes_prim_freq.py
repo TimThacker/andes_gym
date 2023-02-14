@@ -220,9 +220,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i > 1.5 and self.i < 60:
+        if self.i > 12 and self.i < 60:
             coordsig=action
-            coordsig = np.zeros(self.N_Gov)
+            #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
@@ -250,21 +250,27 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # reward functions
 
-        if not sim_crashed and done:
-            reward -= np.sum(np.abs(3000 * (freq - 0.9995)))
-        else:
-            reward -= np.sum(np.abs(50 * (freq - 0.9995)))
+        # Test: Only consider negative rewards past 5s (Gen Trip)
+        
+        if self.i > 10:
+            if not sim_crashed and done:
+                reward -= np.sum(np.abs(3000 * (freq - 0.9995)))
+            else:
+                reward -= np.sum(np.abs(50 * (freq - 0.9995)))
             
-        if np.any(freq < 0.9995):
-            reward -= np.sum(np.abs(1000 * (0.9995 - freq)))
-        if np.any(freq > 0.9996):
-            reward -= np.sum(np.abs(1000 * (freq - 1)))
+            if np.any(freq < 0.9995):
+                reward -= np.sum(np.abs(1000 * (0.9995 - freq)))
+            if np.any(freq > 0.9996):
+                reward -= np.sum(np.abs(1000 * (freq - 1)))
             
             
-        if not sim_crashed and done:
-            reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-        else:
-            reward -= np.sum(np.abs(1000 * rocof))
+            if not sim_crashed and done:
+                reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            else:
+                reward -= np.sum(np.abs(1000 * rocof))
+                
+        else: 
+            reward -= 0
 
         # store last action
         self.action_last = action
