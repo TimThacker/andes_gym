@@ -70,7 +70,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_Gov = 29  # number of IEEEG1M models
         self.N_Bus = 29  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-.002, high=.0015, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-.002, high=.002, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_Gov,))
 
         # This code is executed by the index of the action applications, rather than
@@ -259,7 +259,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 reward -= np.sum(np.abs(50 * (freq - 0.9995)))
             
             if np.any(freq < 0.9995):
-                reward -= np.sum(np.abs(1000 * (0.9995 - freq)))
+                reward -= np.sum(np.abs(3000 * (0.9995 - freq)))
             if np.any(freq > 0.9995):
                 reward -= np.sum(np.abs(1000 * (freq - 1)))
             
