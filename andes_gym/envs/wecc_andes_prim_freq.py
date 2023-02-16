@@ -220,7 +220,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i > 11 and self.i < 45:
+        if self.i > 10 and self.i < 45:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
@@ -264,10 +264,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 reward -= np.sum(np.abs(1000 * (freq - 1)))
             
             
-            #if not sim_crashed and done:
-                #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            #else:
-                #reward -= np.sum(np.abs(1000 * rocof))
+            if not sim_crashed and done:
+                reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            else:
+                reward -= np.sum(np.abs(1000 * rocof))
                 
         else: 
             reward -= 0
