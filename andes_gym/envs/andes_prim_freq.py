@@ -149,6 +149,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
         # self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
+        self.dwdt = np.array(self.sim_case.BusROCOF.Wf_y.a)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
 
         self.action_last = np.zeros(self.N_Gov)
@@ -180,8 +181,10 @@ class AndesPrimaryFreqControl(gym.Env):
         print("Env reset.")
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
+        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         self.freq_print.append(freq[0])
-        return freq
+        obs = np.append(freq, rocof)
+        return obs
 
     def step(self, action):
         """
@@ -200,7 +203,7 @@ class AndesPrimaryFreqControl(gym.Env):
         
         if self.i > 2 and self.i < 20:
             coordsig=action
-            coordsig = np.zeros(self.N_Gov)
+            #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
@@ -216,10 +219,10 @@ class AndesPrimaryFreqControl(gym.Env):
         freq = self.sim_case.dae.x[self.w]
 
         # --- Temporarily disable ROCOF ---
-        # rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
-        # obs = np.append(freq, rocof)
+        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        obs = np.append(freq, rocof)
 
-        obs = freq
+        #obs = freq
 
         if sim_crashed:
             reward -= 9999
@@ -236,6 +239,11 @@ class AndesPrimaryFreqControl(gym.Env):
             reward -= np.sum(1000 * (.994712453 - freq))
         if np.any(freq > 1):
             reward -= np.sum(1000 * (freq - 1))
+            
+        if not sim_crashed and done:
+                reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            else:
+                reward -= np.sum(np.abs(1000 * rocof))
 
         # store last action
         self.action_last = action
@@ -265,9 +273,11 @@ class AndesPrimaryFreqControl(gym.Env):
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
             ydata = self.sim_case.dae.ts.x[:, widx]
+            zdata = self.sim_case.dae.ts.y[:,self.dwdt]
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
+            self.final_rocof_render = np.array(zdata)
             
             
             if sum(self.reward_print) > self.best_reward:
@@ -275,6 +285,7 @@ class AndesPrimaryFreqControl(gym.Env):
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
+                self.best_episode_rocof = self.final_rocof_render
                                     
                                                
         return obs, reward, done, {}
