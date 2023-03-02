@@ -243,7 +243,7 @@ class AndesPrimaryFreqControl(gym.Env):
             if np.any(freq > 1):
                 reward -= np.sum(1000 * (freq - 1))
                 
-        else if self.disturbance == 0.2:
+        elif self.disturbance == 0.2:
             if not sim_crashed and done:
                 reward -= np.sum(np.abs(3000 * (freq - 0.989785)))
             else:
@@ -254,7 +254,7 @@ class AndesPrimaryFreqControl(gym.Env):
             if np.any(freq > 1):
                 reward -= np.sum(1000 * (freq - 1))
                 
-        else if self.disturbance == 0.3:
+        elif self.disturbance == 0.3:
             if not sim_crashed and done:
                 reward -= np.sum(np.abs(3000 * (freq - 0.984663)))
             else:
@@ -265,7 +265,7 @@ class AndesPrimaryFreqControl(gym.Env):
             if np.any(freq > 1):
                 reward -= np.sum(1000 * (freq - 1))
                 
-        else if self.disturbance == 0.4:
+        elif self.disturbance == 0.4:
             if not sim_crashed and done:
                 reward -= np.sum(np.abs(3000 * (freq - 0.979533)))
             else:
