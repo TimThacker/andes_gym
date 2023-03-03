@@ -139,10 +139,8 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        dist_vals = [0.1, 0.2, 0.3, 0.4]
-        self.disturbance = random.choice(dist_vals)
         #self.disturbance = 0.4
-        #self.disturbance = random.uniform(0.1, 0.4)
+        self.disturbance = random.uniform(0.1, 0.4)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
         # configurations
@@ -231,51 +229,20 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # reward functions
-
-        if self.disturbance == 0.1:
-            if not sim_crashed and done:
-                reward -= np.sum(np.abs(3000 * (freq - .994712453)))
-            else:
-                reward -= np.sum(np.abs(50 * (freq - .994712453)))
+        rndm_ss = random.normal(0.986, 0.008)
+        if not sim_crashed and done:
+            #reward -= np.sum(np.abs(3000 * (freq - .994712453)))
+            reward -= np.sum(np.abs(3000 * (freq - rndm_ss)))
+        else:
+            #reward -= np.sum(np.abs(50 * (freq - .994712453)))
+            reward -= np.sum(np.abs(50 * (freq - rndm_ss)))
             
-            if np.any(freq < 0.994712453):
-                reward -= np.sum(1000 * (.994712453 - freq))
-            if np.any(freq > 1):
-                reward -= np.sum(1000 * (freq - 1))
-                
-        elif self.disturbance == 0.2:
-            if not sim_crashed and done:
-                reward -= np.sum(np.abs(3000 * (freq - 0.989785)))
-            else:
-                reward -= np.sum(np.abs(50 * (freq - 0.989785)))
-            
-            if np.any(freq < 0.989785):
-                reward -= np.sum(1000 * (0.989785 - freq))
-            if np.any(freq > 1):
-                reward -= np.sum(1000 * (freq - 1))
-                
-        elif self.disturbance == 0.3:
-            if not sim_crashed and done:
-                reward -= np.sum(np.abs(3000 * (freq - 0.984663)))
-            else:
-                reward -= np.sum(np.abs(50 * (freq - 0.984663)))
-            
-            if np.any(freq < 0.984663):
-                reward -= np.sum(1000 * (0.984663 - freq))
-            if np.any(freq > 1):
-                reward -= np.sum(1000 * (freq - 1))
-                
-        elif self.disturbance == 0.4:
-            if not sim_crashed and done:
-                reward -= np.sum(np.abs(3000 * (freq - 0.979533)))
-            else:
-                reward -= np.sum(np.abs(50 * (freq - 0.979533)))
-            
-            if np.any(freq < 0.979533):
-                reward -= np.sum(1000 * (0.979533 - freq))
-            if np.any(freq > 1):
-                reward -= np.sum(1000 * (freq - 1))
-            
+        #if np.any(freq < 0.994712453):
+        if np.any(freq < rndm_ss):
+            #reward -= np.sum(1000 * (.994712453 - freq))
+            reward -= np.sum(1000 * (rndm_ss - freq))
+        if np.any(freq > 1):
+            reward -= np.sum(1000 * (freq - 1))                
             
             
         if not sim_crashed and done:
