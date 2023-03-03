@@ -77,8 +77,8 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Gov = 5  # number of TG1 models
         self.N_Bus = 5  # let it be the number of generators for now
 
-        self.action_space = spaces.Box(low=-0.02, high=.06, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.4, high=0.4, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-0.01, high=.03, shape=(self.N_Gov,))
+        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_Gov,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
@@ -229,7 +229,7 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # reward functions
-        rndm_ss = random.normal(0.986, 0.008)
+        rndm_ss = random.normal(0.995, 0.008)
         if not sim_crashed and done:
             #reward -= np.sum(np.abs(3000 * (freq - .994712453)))
             reward -= np.sum(np.abs(3000 * (freq - rndm_ss)))
