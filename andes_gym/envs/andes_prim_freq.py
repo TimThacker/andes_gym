@@ -229,7 +229,7 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # reward functions
-        rndm_ss = random.normal(0.986, 0.008)
+        rndm_ss = np.random.normal(0.986, 0.008)
         if not sim_crashed and done:
             #reward -= np.sum(np.abs(3000 * (freq - .994712453)))
             reward -= np.sum(np.abs(3000 * (freq - rndm_ss)))
