@@ -219,7 +219,8 @@ class AndesPrimaryFreqControl(gym.Env):
         freq = self.sim_case.dae.x[self.w]
 
         # --- Temporarily disable ROCOF ---
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        #rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        rocof = np.array(self.sim_case.dae.ts.y[:,self.dwdt])
         obs = np.append(freq, rocof)
 
         #obs = freq
