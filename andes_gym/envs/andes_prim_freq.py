@@ -244,7 +244,7 @@ class AndesPrimaryFreqControl(gym.Env):
         #if np.any(freq > 1):
             #reward -= np.sum(1000 * (freq - 1))                
             
-        reward -= rocof    
+        reward -= np.sum(rocof)    
         if not sim_crashed and done:
             reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
         else:
