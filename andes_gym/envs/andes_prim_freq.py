@@ -219,8 +219,7 @@ class AndesPrimaryFreqControl(gym.Env):
         freq = self.sim_case.dae.x[self.w]
 
         # --- Temporarily disable ROCOF ---
-        #rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
-        rocof = np.array(self.sim_case.dae.ts.y[:,self.dwdt])
+        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         obs = np.append(freq, rocof)
 
         #obs = freq
@@ -245,7 +244,7 @@ class AndesPrimaryFreqControl(gym.Env):
         #if np.any(freq > 1):
             #reward -= np.sum(1000 * (freq - 1))                
             
-            
+        reward -= rocof    
         if not sim_crashed and done:
             reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
         else:
