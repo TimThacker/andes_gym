@@ -181,7 +181,8 @@ class AndesPrimaryFreqControl(gym.Env):
         print("Env reset.")
         self.initialize()
         freq = self.sim_case.dae.x[self.w]
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        #rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        rocof = np.array(self.sim_case.dae.y[self.dwdt])
         self.freq_print.append(freq[0])
         obs = np.append(freq, rocof)
         return obs
@@ -201,7 +202,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i > 2 and self.i < 20:
+        if self.i > 2 and self.i < 30:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
@@ -219,7 +220,8 @@ class AndesPrimaryFreqControl(gym.Env):
         freq = self.sim_case.dae.x[self.w]
 
         # --- Temporarily disable ROCOF ---
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        #rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        rocof = np.array(self.sim_case.dae.y[self.dwdt])
         obs = np.append(freq, rocof)
 
         #obs = freq
@@ -248,7 +250,7 @@ class AndesPrimaryFreqControl(gym.Env):
         if not sim_crashed and done:
             reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
         else:
-            reward -= np.sum(np.abs(1000 * rocof))
+            reward -= np.sum(np.abs(10000 * rocof))
 
         # store last action
         self.action_last = action
