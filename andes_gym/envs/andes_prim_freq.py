@@ -139,8 +139,8 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        #self.disturbance = 0.4
-        self.disturbance = random.uniform(0.1, 0.4)
+        self.disturbance = 0.1
+        #self.disturbance = random.uniform(0.1, 0.4)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
         # configurations
@@ -229,20 +229,20 @@ class AndesPrimaryFreqControl(gym.Env):
             done = True
 
         # reward functions
-        rndm_ss = np.random.normal(0.986, 0.008)
-        if not sim_crashed and done:
+        #rndm_ss = np.random.normal(0.986, 0.008)
+        #if not sim_crashed and done:
             #reward -= np.sum(np.abs(3000 * (freq - .994712453)))
-            reward -= np.sum(np.abs(3000 * (freq - rndm_ss)))
-        else:
+            #reward -= np.sum(np.abs(3000 * (freq - rndm_ss)))
+        #else:
             #reward -= np.sum(np.abs(50 * (freq - .994712453)))
-            reward -= np.sum(np.abs(50 * (freq - rndm_ss)))
+            #reward -= np.sum(np.abs(50 * (freq - rndm_ss)))
             
         #if np.any(freq < 0.994712453):
-        if np.any(freq < rndm_ss):
+        #if np.any(freq < rndm_ss):
             #reward -= np.sum(1000 * (.994712453 - freq))
-            reward -= np.sum(1000 * (rndm_ss - freq))
-        if np.any(freq > 1):
-            reward -= np.sum(1000 * (freq - 1))                
+            #reward -= np.sum(1000 * (rndm_ss - freq))
+        #if np.any(freq > 1):
+            #reward -= np.sum(1000 * (freq - 1))                
             
             
         if not sim_crashed and done:
