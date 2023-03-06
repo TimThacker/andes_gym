@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 env = gym.make("AndesPrimaryFreqControl-v0")
 # policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
-model = TD3.load('test_primfreq_mod.pkl')
+model = TD3.load('andes_primfreq_td3_model_0.pkl')
 save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
 
 obs = env.reset()
