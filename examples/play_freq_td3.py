@@ -15,7 +15,7 @@ model = TD3.load('test_primfreq_mod.pkl')
 save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
 
 obs = env.reset()
-    done = False
+done = False
     while True:
         action, _states = model.predict(obs)
         obs, rewards, done, info = env.step(action)
