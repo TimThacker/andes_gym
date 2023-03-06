@@ -21,7 +21,7 @@ while True:
     if done is True:
         env.render()
     freqRec = pd.DataFrame(env.best_episode_freq)
-    freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_{}.csv".format(id), index=False)
+    freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_{}.csv", index=False)
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(1, 1, 1)
     ax.set_xlim(left=0, right=np.max(env.t_render))
