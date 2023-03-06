@@ -1,7 +1,7 @@
 import gym
 import andes_gym
 from stable_baselines3.ddpg.policies import MlpPolicy
-from stable_baselines3 import DDPG
+from stable_baselines3 import TD3
 import torch
 import pickle
 
