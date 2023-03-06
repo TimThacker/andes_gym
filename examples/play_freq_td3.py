@@ -5,7 +5,7 @@ from stable_baselines3 import TD3
 import torch
 import pickle
 
-env = gym.make("AndesFreqControl-v0")
+env = gym.make("AndesPrimaryFreqControl-v0")
 # policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
 model = TD3.load('test_primfreq_mod.pkl')
 
