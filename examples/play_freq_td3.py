@@ -7,7 +7,7 @@ import pickle
 
 env = gym.make("AndesFreqControl-v0")
 # policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
-model = model.load('test_primfreq_mod.pkl')
+model = TD3.load('test_primfreq_mod.pkl')
 
 obs = env.reset()
 done = False
