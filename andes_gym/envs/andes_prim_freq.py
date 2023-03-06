@@ -139,8 +139,8 @@ class AndesPrimaryFreqControl(gym.Env):
         self.sim_case.TDS.init()
 
         # random or fixed disturbance
-        #self.disturbance = 0.1
-        self.disturbance = random.uniform(0.1, 0.4)
+        self.disturbance = 0.1
+        #self.disturbance = random.uniform(0.1, 0.4)
         self.sim_case.Alter.amount.v[0] = self.disturbance
 
         # configurations
