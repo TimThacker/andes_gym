@@ -16,11 +16,11 @@ save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
 
 obs = env.reset()
 done = False
-    while True:
-        action, _states = model.predict(obs)
-        obs, rewards, done, info = env.step(action)
-        if done is True:
-            break
+while True:
+    action, _states = model.predict(obs)
+    obs, rewards, done, info = env.step(action)
+    if done is True:
+        break
 
 env.render()
 freqRec = pd.DataFrame(env.best_episode_freq)
