@@ -41,5 +41,5 @@ for i in range(env.N_Bus):
 plt.savefig(save_dir + "fig_primfreq_dynamics_trained.pdf")
 sigplot = np.arange(1,30, 0.5)
 for i in range(env.N_Bus):
-    ax.plot(sigplot, coord_record[:,i])
+    ax.plot(sigplot, coord_record[:,i].values)
 plt.savefig(save_dir + "fig_coordrecord.pdf")
