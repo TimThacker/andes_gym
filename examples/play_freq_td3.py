@@ -1,0 +1,20 @@
+import gym
+import andes_gym
+from stable_baselines3.ddpg.policies import MlpPolicy
+from stable_baselines3 import DDPG
+import torch
+import pickle
+
+env = gym.make("AndesFreqControl-v0")
+# policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
+model = pickle.load(open('C:\Users\tntth\OneDrive\Documents\GradSchool\Research\ANDES_Research\Data\TD3\IEEE14 OnlyRoCoF\test_primfreq_mod.pkl','rb'))
+
+obs = env.reset()
+done = False
+
+while True:
+    action, _states = model.predict(obs)
+    obs, rewards, done, info = env.step(action)
+
+    if done is True:
+        env.render()
