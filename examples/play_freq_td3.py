@@ -39,3 +39,7 @@ ax.ticklabel_format(useOffset=False)
 for i in range(env.N_Bus):
     ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
 plt.savefig(save_dir + "fig_primfreq_dynamics_trained.pdf")
+sigplot = np.arange(1, len(coord_record[:,1], 0.5)
+for i in range(env.N_Bus):
+    ax.plot(sigplot, coord_record[:,i])
+plt.savefig(save_dir + "fig_coordrecord.pdf")
