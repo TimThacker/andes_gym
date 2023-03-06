@@ -9,6 +9,7 @@ import numpy as np
 env = gym.make("AndesPrimaryFreqControl-v0")
 # policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
 model = TD3.load('test_primfreq_mod.pkl')
+save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
 
 obs = env.reset()
 done = False
@@ -32,4 +33,4 @@ while True:
     ax.ticklabel_format(useOffset=False)
     for i in range(env.N_Bus):
         ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
-    plt.savefig("fig_primfreq_dynamics_best.pdf")
+    plt.savefig(save_dir + "fig_primfreq_dynamics_best.pdf")
