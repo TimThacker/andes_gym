@@ -18,3 +18,15 @@ while True:
 
     if done is True:
         env.render()
+    fig = plt.figure(figsize=(9, 6))
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_xlim(left=0, right=np.max(env.t_render))
+    ax.set_ylim(auto=True)
+    ax.xaxis.set_tick_params(labelsize=16)
+    ax.yaxis.set_tick_params(labelsize=16)
+    ax.set_xlabel("Time [s]", fontsize=16)
+    ax.set_ylabel("Bus Frequency [Hz]", fontsize=16)
+    ax.ticklabel_format(useOffset=False)
+    for i in range(env.N_Bus):
+        ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
+    plt.savefig("Trained_freq_dynamics.pdf")
