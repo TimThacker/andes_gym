@@ -20,7 +20,7 @@ for id in range(1):
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.001 * np.ones(n_actions))
     train_freq = (1,"episode")
-    policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64, 64])  # kwargs == keyword arguments
+    policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[256, 128, 64])  # kwargs == keyword arguments
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, target_policy_noise=0.1, train_freq=train_freq, learning_rate = 0.0001, learning_starts=200)
     #model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, train_freq=train_freq, learning_starts=200)
 
