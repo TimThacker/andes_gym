@@ -18,11 +18,12 @@ save_dir = "C:/Users/tntth/andes_gym/examples/SAC_data_ls_200_test/"
 for id in range(1):
     env = gym.make('AndesPrimaryFreqControl-v0')
     n_actions = env.action_space.shape[-1]
-    action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
+    #action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
     train_freq = (1,"episode")
-    policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])  # kwargs == keyword arguments
-    model = SAC(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=200)
-
+    policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64, 64])  # kwargs == keyword arguments
+    #model = SAC(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=200)
+    model = SAC(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, train_freq=train_freq, learning_starts=200)
+    
     time_start = time.time()
     model.learn(total_timesteps=5000)  # we need to change the total steps with action numbers
     
