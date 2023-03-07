@@ -78,7 +78,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Bus = 5  # let it be the number of generators for now
 
         self.action_space = spaces.Box(low=-0.01, high=.03, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2*self.N_Gov,))
+        self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(2*self.N_Gov,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
