@@ -23,6 +23,7 @@ for id in range(1):
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
     #model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_starts=200, tensorboard_log="./td3_tensorboard/")
     model= TD3.load('model_td3_test2.pkl')
+    obs=env.reset()
     time_start = time.time()
     model.learn(total_timesteps=50000,tb_log_name="TD3_test")  # we need to change the total steps with action numbers
     
