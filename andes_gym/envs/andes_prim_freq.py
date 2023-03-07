@@ -78,7 +78,7 @@ class AndesPrimaryFreqControl(gym.Env):
         self.N_Bus = 5  # let it be the number of generators for now
 
         self.action_space = spaces.Box(low=-0.01, high=.03, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_Gov,))
+        self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(2*self.N_Gov,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
@@ -183,8 +183,8 @@ class AndesPrimaryFreqControl(gym.Env):
         freq = self.sim_case.dae.x[self.w]
         rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         self.freq_print.append(freq[0])
-        #obs = np.append(freq, rocof)
-        obs = rocof
+        obs = np.append(freq, rocof)
+        #obs = rocof
         return obs
 
     def step(self, action):
@@ -221,8 +221,8 @@ class AndesPrimaryFreqControl(gym.Env):
 
         # --- Temporarily disable ROCOF ---
         rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
-        #obs = np.append(freq, rocof)
-        obs = rocof
+        obs = np.append(freq, rocof)
+        #obs = rocof
 
         if sim_crashed:
             reward -= 9999
