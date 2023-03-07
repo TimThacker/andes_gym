@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 env = gym.make("AndesPrimaryFreqControl-v0")
 # policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
-model = TD3.load('td3_3layer_50k_singledist.pkl')
+model = TD3.load('model_ieee14_rocof_baseobs.pkl')
 save_dir = "C:/Users/tntth/andes_gym/examples/Trained_Model_Application/"
 
 obs = env.reset()
