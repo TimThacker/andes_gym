@@ -246,9 +246,10 @@ class AndesPrimaryFreqControl(gym.Env):
             
         #reward -= np.sum(rocof)    
         if not sim_crashed and done:
-            reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            reward -= 10000*np.sum(np.abs(rocof))
         else:
-            reward -= np.sum(np.abs(10000 * rocof))
+            reward -= 10000*np.sum(np.abs(rocof))
 
         # store last action
         self.action_last = action
