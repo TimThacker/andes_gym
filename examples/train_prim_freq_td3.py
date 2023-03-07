@@ -25,7 +25,7 @@ for id in range(1):
     #model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, train_freq=train_freq, learning_starts=200)
 
     time_start = time.time()
-    model.learn(total_timesteps=50000)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=500000)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
@@ -34,6 +34,8 @@ for id in range(1):
     freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_{}.csv".format(id), index=False)
     coord_record = pd.DataFrame(env.best_coord_record)
     coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_{}.csv".format(id), index=False)
+    rocof_record = pd.DataFrame(env.best_episode_rocof)
+    rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
     totalRewards = pd.DataFrame(env.episode_reward)
     totalRewards.to_csv(save_dir + "andes_primfreq_td3_episodeRewards_{}.csv".format(id), index=False)
 
