@@ -25,7 +25,7 @@ for id in range(1):
     #model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, train_freq=train_freq, learning_starts=200)
 
     time_start = time.time()
-    model.learn(total_timesteps=500000)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=50000)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
