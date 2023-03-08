@@ -90,7 +90,7 @@ for id in range(5):
     lr = 0.0005
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq,learning_rate=lr, batch_size = (200), learning_starts=200, tensorboard_log="./td3_tensorboard_lr/")
-    callback = SaveOnBestTrainingRewardCallback(check_freq=1000, log_dir=log_dir, id)
+    callback = SaveOnBestTrainingRewardCallback(id, check_freq=1000, log_dir=log_dir)
     time_start = time.time()
     model.learn(total_timesteps=50000,tb_log_name="TD3_test_lr", callback=callback)  # we need to change the total steps with action numbers
     
