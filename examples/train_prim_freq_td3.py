@@ -32,7 +32,7 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
         super(SaveOnBestTrainingRewardCallback, self).__init__(verbose)
         self.check_freq = check_freq
         self.log_dir = log_dir
-        self.save_path = os.path.join(log_dir, "best_model_{}".format(id), index=False)
+        self.save_path = os.path.join(log_dir, "best_model_{}".format(id))
         self.best_mean_reward = -np.inf
 
     def _init_callback(self) -> None:
