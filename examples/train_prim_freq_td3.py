@@ -7,25 +7,92 @@ import matplotlib.pyplot as plt
 import time
 import torch
 from stable_baselines3.td3.policies import MlpPolicy
+from stable_baselines3.common import results_plotter
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.results_plotter import load_results, ts2xy, plot_results
+from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.noise import NormalActionNoise
 from stable_baselines3 import TD3
+
+
+
+##############
+
+class SaveOnBestTrainingRewardCallback(BaseCallback):
+    """
+    Callback for saving a model (the check is done every ``check_freq`` steps)
+    based on the training reward (in practice, we recommend using ``EvalCallback``).
+
+    :param check_freq:
+    :param log_dir: Path to the folder where the model will be saved.
+      It must contains the file created by the ``Monitor`` wrapper.
+    :param verbose: Verbosity level: 0 for no output, 1 for info messages, 2 for debug messages
+    """
+    def __init__(self, check_freq: int, log_dir: str, verbose: int = 1, id=int):
+        super(SaveOnBestTrainingRewardCallback, self).__init__(verbose)
+        self.check_freq = check_freq
+        self.log_dir = log_dir
+        self.save_path = os.path.join(log_dir, "best_model_{}".format(id), index=False)
+        self.best_mean_reward = -np.inf
+
+    def _init_callback(self) -> None:
+        # Create folder if needed
+        if self.save_path is not None:
+            os.makedirs(self.save_path, exist_ok=True)
+
+    def _on_step(self) -> bool:
+        if self.n_calls % self.check_freq == 0:
+
+          # Retrieve training reward
+          x, y = ts2xy(load_results(self.log_dir), "timesteps")
+          if len(x) > 0:
+              # Mean training reward over the last 100 episodes
+              mean_reward = np.mean(y[-100:])
+              if self.verbose >= 1:
+                print(f"Num timesteps: {self.num_timesteps}")
+                print(f"Best mean reward: {self.best_mean_reward:.2f} - Last mean reward per episode: {mean_reward:.2f}")
+
+              # New best model, you could save the agent here
+              if mean_reward > self.best_mean_reward:
+                  self.best_mean_reward = mean_reward
+                  # Example for saving best model
+                  if self.verbose >= 1:
+                    print(f"Saving new best model to {self.save_path}")
+                  self.model.save(self.save_path)
+
+        return True
+
+
+#################
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
 save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
+log_dir = "tmp/"
+os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
-for id in range(1):
-    env = gym.make('AndesPrimaryFreqControl-v0')
+for id in range(5):
+    env = gym.make('AndesPrimaryFreqControl-v0')\
+    env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
-    action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0001 * np.ones(n_actions))
+    if id == 0:
+        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0001 * np.ones(n_actions))
+    elif id == 1:
+        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0005 * np.ones(n_actions))
+    elif id == 2:
+        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.001 * np.ones(n_actions))
+    elif id == 3:
+        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.005 * np.ones(n_actions))
+    elif id == 4:
+        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
     train_freq = (1,"episode")
     lr = 0.0005
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq,learning_rate=lr, batch_size = (200), learning_starts=200, tensorboard_log="./td3_tensorboard_lr/")
-
+    callback = SaveOnBestTrainingRewardCallback(check_freq=1000, log_dir=log_dir, id)
     time_start = time.time()
-    model.learn(total_timesteps=500,tb_log_name="TD3_test_lr")  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=50000,tb_log_name="TD3_test_lr", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
