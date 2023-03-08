@@ -15,23 +15,16 @@ plot_episode = True
 save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
 
 # Change the range size to train a larger number of models.
-for id in range(4):
+for id in range(1):
     env = gym.make('AndesPrimaryFreqControl-v0')
     n_actions = env.action_space.shape[-1]
-    if id == 0:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0001 * np.ones(n_actions))
-    elif id == 1:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.001 * np.ones(n_actions))
-    elif id == 2:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
-    elif id == 3:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
+    action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0001 * np.ones(n_actions))
     train_freq = (1,"episode")
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size = (200), learning_starts=200, tensorboard_log="./td3_tensorboard_actnoise/")
 
     time_start = time.time()
-    model.learn(total_timesteps=100000,tb_log_name="TD3_test_actnoise")  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=40000,tb_log_name="TD3_test_actnoise")  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
