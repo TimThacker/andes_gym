@@ -73,8 +73,8 @@ os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
 for id in range(5):
-    env = gym.make('AndesPrimaryFreqControl-v0')\
-    #env = Monitor(env, log_dir)
+    env = gym.make('AndesPrimaryFreqControl-v0')
+    env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
     if id == 0:
         action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0001 * np.ones(n_actions))
