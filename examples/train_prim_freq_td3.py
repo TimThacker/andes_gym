@@ -67,8 +67,8 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
-save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test/"
-log_dir = "tmp/"
+save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_200_test2/"
+log_dir = "tmp2/"
 os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
@@ -76,16 +76,7 @@ for id in range(5):
     env = gym.make('AndesPrimaryFreqControl-v0')
     env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
-    if id == 0:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0001 * np.ones(n_actions))
-    elif id == 1:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.0005 * np.ones(n_actions))
-    elif id == 2:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.001 * np.ones(n_actions))
-    elif id == 3:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.005 * np.ones(n_actions))
-    elif id == 4:
-        action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
+    action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
     train_freq = (1,"episode")
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size = 200, learning_starts=200, tensorboard_log="./td3_tensorboard_actnoise2/")
