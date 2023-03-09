@@ -46,14 +46,14 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
           # Retrieve training reward
           x, y = ts2xy(load_results(self.log_dir), "timesteps")
           if len(x) > 0:
-              # Mean training reward over the last 100 episodes
-              mean_reward = np.mean(y[-100:])
+              # Mean training reward over the last 5 episodes
+              mean_reward = np.mean(y[-5:])
               if self.verbose >= 1:
                 print(f"Num timesteps: {self.num_timesteps}")
                 print(f"Best mean reward: {self.best_mean_reward:.2f} - Last mean reward per episode: {mean_reward:.2f}")
 
               # New best model, you could save the agent here
-              if mean_reward > self.best_mean_reward:
+              if mean_reward > self.best_mean_reward and mean_reward > -400:
                   self.best_mean_reward = mean_reward
                   # Example for saving best model
                   if self.verbose >= 1:
@@ -87,12 +87,11 @@ for id in range(5):
     elif id == 4:
         action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
     train_freq = (1,"episode")
-    lr = 0.0005
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
-    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq,learning_rate=lr, batch_size = (200), learning_starts=200, tensorboard_log="./td3_tensorboard_actnoise2/")
-    callback = SaveOnBestTrainingRewardCallback(id, check_freq=1000, log_dir=log_dir)
+    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size = (200), learning_starts=200, tensorboard_log="./td3_tensorboard_actnoise2/")
+    callback = SaveOnBestTrainingRewardCallback(id, check_freq=5, log_dir=log_dir)
     time_start = time.time()
-    model.learn(total_timesteps=50000,tb_log_name="TD3_test_lr", callback=callback)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=100000,tb_log_name="TD3_test_actnoise2", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
