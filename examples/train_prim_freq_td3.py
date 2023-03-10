@@ -67,22 +67,22 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 plot_episode = True
-save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_ls_test/"
+save_dir = "C:/Users/tntth/andes_gym/examples/TD3_data_test/"
 log_dir = "tmp/"
 os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
-for id in range(5):
+for id in range(30):
     env = gym.make('AndesPrimaryFreqControl-v0')
     env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
     train_freq = (1,"episode")
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
-    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=id*100, tensorboard_log="./td3_tensorboard_ls/")
+    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=id*100, tensorboard_log="./td3_tensorboard_bigbatch/")
     callback = SaveOnBestTrainingRewardCallback(id, check_freq=300, log_dir=log_dir)
     time_start = time.time()
-    model.learn(total_timesteps=100000,tb_log_name="TD3_test_ls", callback=callback)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=100000,tb_log_name="TD3_test_bigbatch", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
