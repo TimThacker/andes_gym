@@ -54,7 +54,8 @@ class AndesPrimaryFreqControl(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM_full.xlsx")
+        #self.path = os.path.join(path, "ieee14_alter_pq_IEESGORM_full.xlsx")
+        self.path = os.path.join(path, "ieee14_ieesgo_full_test.xlsx")
 
         self.tf = 30.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -204,7 +205,7 @@ class AndesPrimaryFreqControl(gym.Env):
         
         if self.i > 2 and self.i < 20:
             coordsig=action
-            coordsig = np.zeros(self.N_Gov)
+            #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
