@@ -25,9 +25,9 @@ while True:
 
 env.render()
 coord_record = pd.DataFrame(env.best_coord_record)
-coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_trained.csv", index=False)
+coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_base.csv", index=False)
 freqRec = pd.DataFrame(env.best_episode_freq)
-freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_trained.csv", index=False)
+freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_base.csv", index=False)
 fig = plt.figure(figsize=(9, 6))
 ax = fig.add_subplot(1, 1, 1)
 ax.set_xlim(left=0, right=np.max(env.t_render))
@@ -39,4 +39,4 @@ ax.set_ylabel("Bus Frequency [Hz]", fontsize=16)
 ax.ticklabel_format(useOffset=False)
 for i in range(env.N_Bus):
     ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
-plt.savefig(save_dir + "fig_primfreq_dynamics_trained.pdf")
+plt.savefig(save_dir + "fig_primfreq_dynamics_base.pdf")
