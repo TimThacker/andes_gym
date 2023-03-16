@@ -53,7 +53,7 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
                 print(f"Best mean reward: {self.best_mean_reward:.2f} - Last mean reward per episode: {mean_reward:.2f}")
 
               # New best model, you could save the agent here
-              if mean_reward > self.best_mean_reward and mean_reward > -420:
+              if mean_reward > self.best_mean_reward and mean_reward > -900:
                   self.best_mean_reward = mean_reward
                   # Example for saving best model
                   if self.verbose >= 1:
@@ -73,16 +73,16 @@ os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
 for id in range(15):
-    env = gym.make('AndesPrimaryFreqControl-v0')
+    env = gym.make('AndesPrimaryFreqControlTest-v0')
     env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
     train_freq = (1,"episode")
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
-    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=200, tensorboard_log="./td3_tensorboard_bigbatch/")
+    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=200, tensorboard_log="./td3_tensorboard_bigbatch_distr/")
     callback = SaveOnBestTrainingRewardCallback(id, check_freq=300, log_dir=log_dir)
     time_start = time.time()
-    model.learn(total_timesteps=100000,tb_log_name="TD3_test_bigbatch", callback=callback)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=100000,tb_log_name="TD3_test_bigbatch_distr", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
@@ -93,6 +93,10 @@ for id in range(15):
     coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_{}.csv".format(id), index=False)
     rocof_record = pd.DataFrame(env.best_episode_rocof)
     rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
+    norm_rocof_record = pd.DataFrame(env.best_episode_rocof_norm)
+    norm_rocof_record.to_csv(save_dir + "andes_primfreq_td3_norm_rocof_dist_.csv", index=False)
+    rocof_window = pd.DataFrame(env.rocof_window)
+    rocof_window.to_csv(save_dir + "andes_primfreq_td3_rocof_window_.csv", index=False)
     totalRewards = pd.DataFrame(env.episode_reward)
     totalRewards.to_csv(save_dir + "andes_primfreq_td3_episodeRewards_{}.csv".format(id), index=False)
 
