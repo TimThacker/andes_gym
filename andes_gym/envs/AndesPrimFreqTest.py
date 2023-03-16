@@ -195,13 +195,12 @@ class AndesPrimaryFreqControlTest(gym.Env):
 
         # apply control for current step
         #coordsig=action*(1/100)
-        if self.i < 3:
+        if self.i < 4:
             print('IN THE LOOP')
-            windowdata = self.sim_case.dae.ts.y[:,self.dwdt]
-            windowdata = np.array(windowdata)
+            windowdata = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
             self.rocof_window = np.append(self.rocof_window,windowdata)
         
-        if self.i > 2 and self.i < 20:
+        if self.i > 4 and self.i < 20:
             coordsig=action
             coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
@@ -230,7 +229,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
             done = True
 
       
-        if self.i > 2 and not sim_crashed and done:
+        if self.i > 4 and not sim_crashed and done:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
             norm_rocof = np.divide(rocof, np.max(self.rocof_window))
             reward -= 100*np.sum(np.abs(norm_rocof))
