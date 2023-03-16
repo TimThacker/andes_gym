@@ -197,7 +197,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         #coordsig=action*(1/100)
         if self.i < 2:
             windowdata = np.array(self.sim_case.dae.ts.y[:,self.dwdt])
-            self.rocof_window = np.append(self.rocof_window,windowdata)
+            self.rocof_window = windowdata
         
         if self.i > 2 and self.i < 20:
             coordsig=action
