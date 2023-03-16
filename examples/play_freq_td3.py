@@ -25,7 +25,7 @@ while True:
 
 env.render()
 rocof_record = pd.DataFrame(env.best_episode_rocof)
-rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
+rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv", index=False)
 coord_record = pd.DataFrame(env.best_coord_record)
 coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_trained.csv", index=False)
 freqRec = pd.DataFrame(env.best_episode_freq)
