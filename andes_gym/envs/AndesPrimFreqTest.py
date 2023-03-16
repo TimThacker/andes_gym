@@ -107,6 +107,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
+        self.rocof_normfact = 0
 
         
     
@@ -197,7 +198,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         
         if self.i > 2 and self.i < 20:
             coordsig=action
-            coordsig = np.zeros(self.N_Gov)
+            #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
@@ -237,12 +238,19 @@ class AndesPrimaryFreqControlTest(gym.Env):
         #if np.any(freq > 1):
             #reward -= np.sum(1000 * (freq - 1))                
             
-        #reward -= np.sum(rocof)    
-        if not sim_crashed and done:
-            #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            reward -= 10000*np.sum(np.abs(rocof))
-        else:
-            reward -= 10000*np.sum(np.abs(rocof))
+        #reward -= np.sum(rocof)
+        
+        if self.i < 2:
+            if np.maximum(rocof) > self.rocof_normfact:
+            self.rocof_normfact = np.maximum(rocof)
+      
+        elif:
+            if not sim_crashed and done:
+                #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+                norm_rocof = np.divide(rocof, self.rocof_normfact)
+                reward -= 10000*np.sum(np.abs(norm_rocof))
+            else:
+                reward -= 10000*np.sum(np.abs(norm_rocof))
 
         # store last action
         self.action_last = action
@@ -285,6 +293,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
+                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, self.rocof_normfact)
                                     
                                                
         return obs, reward, done, {}
