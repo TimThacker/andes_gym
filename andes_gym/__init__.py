@@ -17,3 +17,7 @@ register(
     id='AndesPrimaryFreqControlWECC-v0',
     entry_point='andes_gym:AndesPrimaryFreqControlWECC',
 )
+register(
+    id='AndesPrimaryFreqControlTest-v0',
+    entry_point='andes_gym:AndesPrimaryFreqControlTest',
+)
