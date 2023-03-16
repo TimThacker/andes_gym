@@ -294,7 +294,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
-                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, rocof_normfact)
+                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, self.rocof_normfact)
                                     
                                                
         return obs, reward, done, {}
