@@ -242,7 +242,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         
         if self.i < 2:
             if np.maximum(rocof) > self.rocof_normfact:
-            self.rocof_normfact = np.maximum(rocof)
+                self.rocof_normfact = np.maximum(rocof)
       
         elif:
             if not sim_crashed and done:
