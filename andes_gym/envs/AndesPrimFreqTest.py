@@ -107,7 +107,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
-        rocof_normfact = 1
+        self.rocof_normfact = 1
 
         
     
@@ -242,15 +242,15 @@ class AndesPrimaryFreqControlTest(gym.Env):
         #reward -= np.sum(rocof)
         
         if self.i < 2:
-            if np.max(rocof) > rocof_normfact:
-                rocof_normfact = np.max(rocof)
+            if np.max(rocof) > self.rocof_normfact:
+                self.rocof_normfact = np.max(rocof)
       
         if self.i > 2 and not sim_crashed and done:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            norm_rocof = np.divide(rocof, rocof_normfact)
+            norm_rocof = np.divide(rocof, self.rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
         if self.i > 2:
-            norm_rocof = np.divide(rocof, rocof_normfact)
+            norm_rocof = np.divide(rocof, self.rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
 
         # store last action
