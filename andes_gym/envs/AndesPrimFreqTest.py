@@ -198,7 +198,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         
         if self.i > 2 and self.i < 20:
             coordsig=action
-            #coordsig = np.zeros(self.N_Gov)
+            coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
@@ -293,7 +293,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
-                #self.best_episode_rocof_norm = np.divide(self.final_rocof_render, self.rocof_normfact)
+                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, self.rocof_normfact)
                                     
                                                
         return obs, reward, done, {}
