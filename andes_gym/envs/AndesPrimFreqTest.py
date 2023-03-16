@@ -107,7 +107,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
-        self.rocof_window = [1]
+        self.rocof_window = []
 
         
     
@@ -228,11 +228,11 @@ class AndesPrimaryFreqControlTest(gym.Env):
             done = True
 
       
-        if self.i > 2 and not sim_crashed and done:
+        if self.i > 2 and not sim_crashed and done and np.max(self.rocof_window) > 0:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
             norm_rocof = np.divide(rocof, np.max(self.rocof_window))
             reward -= 100*np.sum(np.abs(norm_rocof))
-        else:
+        else if np.max(self.rocof_window) > 0:
             norm_rocof = np.divide(rocof, np.max(self.rocof_window))
             reward -= 100*np.sum(np.abs(norm_rocof))
 
