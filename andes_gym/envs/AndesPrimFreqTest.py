@@ -244,8 +244,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
             if np.maximum(rocof) > self.rocof_normfact:
                 self.rocof_normfact = np.maximum(rocof)
       
-        elif:
-            if not sim_crashed and done:
+        elif not sim_crashed and done:
                 #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
                 norm_rocof = np.divide(rocof, self.rocof_normfact)
                 reward -= 10000*np.sum(np.abs(norm_rocof))
