@@ -107,7 +107,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
-        self.rocof_normfact = 0
+        self.rocof_normfact = 1
 
         
     
