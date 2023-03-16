@@ -249,6 +249,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
             norm_rocof = np.divide(rocof, self.rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
         else:
+            norm_rocof = np.divide(rocof, self.rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
 
         # store last action
