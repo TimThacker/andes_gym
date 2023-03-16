@@ -230,10 +230,10 @@ class AndesPrimaryFreqControlTest(gym.Env):
       
         if self.i > 2 and not sim_crashed and done and np.max(np.abs(self.rocof_window)) > 0:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            norm_rocof = np.divide(rocof, np.max(self.rocof_window))
+            norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
             reward -= 100*np.sum(np.abs(norm_rocof))
         elif np.max(np.abs(self.rocof_window)) > 0:
-            norm_rocof = np.divide(rocof, np.max(self.rocof_window))
+            norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
             reward -= 100*np.sum(np.abs(norm_rocof))
 
         # store last action
@@ -277,7 +277,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
-                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(self.rocof_window))
+                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(np.abs(self.rocof_window)))
                 
                                     
                                                
