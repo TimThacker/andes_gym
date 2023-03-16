@@ -107,7 +107,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
-        self.rocof_normfact = 1
+        rocof_normfact = 0
 
         
     
@@ -187,7 +187,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         """
         reward = 0.0  # reward for the current step
         done = False
-
+        
         # Get the next action time in the list
         if self.i >= len(self.action_instants) - 1:  # the learning ends before the last instant
             # all actions have been taken. wrap up the simulation
@@ -195,6 +195,10 @@ class AndesPrimaryFreqControlTest(gym.Env):
 
         # apply control for current step
         #coordsig=action*(1/100)
+        
+        if self.i < 2:
+            if np.max(rocof) > rocof_normfact:
+                rocof_normfact = np.max(rocof)
         
         if self.i > 2 and self.i < 20:
             coordsig=action
@@ -240,16 +244,14 @@ class AndesPrimaryFreqControlTest(gym.Env):
             
         #reward -= np.sum(rocof)
         
-        if self.i < 2:
-            if np.max(rocof) > self.rocof_normfact:
-                self.rocof_normfact = np.max(rocof)
+
       
         elif not sim_crashed and done:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            norm_rocof = np.divide(rocof, self.rocof_normfact)
+            norm_rocof = np.divide(rocof, rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
         else:
-            norm_rocof = np.divide(rocof, self.rocof_normfact)
+            norm_rocof = np.divide(rocof, rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
 
         # store last action
@@ -293,7 +295,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
-                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, self.rocof_normfact)
+                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, rocof_normfact)
                                     
                                                
         return obs, reward, done, {}
