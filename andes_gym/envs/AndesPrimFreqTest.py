@@ -196,9 +196,6 @@ class AndesPrimaryFreqControlTest(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i < 2:
-            if np.max(rocof) > rocof_normfact:
-                rocof_normfact = np.max(rocof)
         
         if self.i > 2 and self.i < 20:
             coordsig=action
@@ -244,9 +241,11 @@ class AndesPrimaryFreqControlTest(gym.Env):
             
         #reward -= np.sum(rocof)
         
-
+        if self.i < 2:
+            if np.max(rocof) > rocof_normfact:
+                rocof_normfact = np.max(rocof)
       
-        elif not sim_crashed and done:
+        if not sim_crashed and done:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
             norm_rocof = np.divide(rocof, rocof_normfact)
             reward -= 10000*np.sum(np.abs(norm_rocof))
