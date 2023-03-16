@@ -107,7 +107,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.best_episode_freq = []
         self.coord_record = []
         self.best_coord_record = []
-        self.rocof_normfact = 0
+        self.rocof_normfact = 1
 
         
     
@@ -215,6 +215,8 @@ class AndesPrimaryFreqControlTest(gym.Env):
         freq = self.sim_case.dae.x[self.w]
 
         # --- Temporarily disable ROCOF ---
+                
+        
         rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         obs = np.append(freq, rocof)
         #obs = rocof
@@ -223,27 +225,8 @@ class AndesPrimaryFreqControlTest(gym.Env):
             reward -= 9999
             done = True
 
-        # reward functions
-        #rndm_ss = np.random.normal(0.986, 0.008)
-        #if not sim_crashed and done:
-            #reward -= np.sum(np.abs(3000 * (freq - .994712453)))
-            #reward -= np.sum(np.abs(3000 * (freq - rndm_ss)))
-        #else:
-            #reward -= np.sum(np.abs(50 * (freq - .994712453)))
-            #reward -= np.sum(np.abs(50 * (freq - rndm_ss)))
-            
-        #if np.any(freq < 0.994712453):
-        #if np.any(freq < rndm_ss):
-            #reward -= np.sum(1000 * (.994712453 - freq))
-            #reward -= np.sum(1000 * (rndm_ss - freq))
-        #if np.any(freq > 1):
-            #reward -= np.sum(1000 * (freq - 1))                
-            
-        #reward -= np.sum(rocof)
-        
         if self.i < 2:
-            if np.max(rocof) > self.rocof_normfact:
-                self.rocof_normfact = np.max(rocof)
+            self.rocof_normfact = np.max(rocof)
       
         if self.i > 2 and not sim_crashed and done:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
