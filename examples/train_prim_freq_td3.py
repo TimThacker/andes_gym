@@ -96,8 +96,8 @@ for id in range(15):
     rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
     #norm_rocof_record = pd.DataFrame(env.best_episode_rocof_norm)
     #norm_rocof_record.to_csv(save_dir + "andes_primfreq_td3_norm_rocof_dist_.csv", index=False)
-    rocof_window = pd.DataFrame(env.rocof_window)
-    rocof_window.to_csv(save_dir + "andes_primfreq_td3_rocof_window_.csv", index=False)
+    #rocof_window = pd.DataFrame(env.rocof_window)
+    #rocof_window.to_csv(save_dir + "andes_primfreq_td3_rocof_window_.csv", index=False)
     totalRewards = pd.DataFrame(env.episode_reward)
     totalRewards.to_csv(save_dir + "andes_primfreq_td3_episodeRewards_{}.csv".format(id), index=False)
 
