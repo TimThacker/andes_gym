@@ -72,7 +72,7 @@ class AndesPrimaryFreqControl(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(1, 30, 60)
+        self.action_instants = np.linspace(1, 10.5, 20)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
@@ -203,15 +203,15 @@ class AndesPrimaryFreqControl(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i > 2 and self.i < 20:
-            coordsig=action
+        #if self.i > 2 and self.i < 20:
+        coordsig=action
             #coordsig = np.zeros(self.N_Gov)
-            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
-            self.coord_record.append(coordsig)
-        else:
-            coordsig = np.zeros(self.N_Gov)
-            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
-            self.coord_record.append(coordsig)
+        self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+        self.coord_record.append(coordsig)
+        #else:
+            #coordsig = np.zeros(self.N_Gov)
+            #self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+            #self.coord_record.append(coordsig)
 
 
         # Run andes TDS to the next time and increment self.i by 1
