@@ -116,7 +116,6 @@ class AndesPrimaryFreqControl(gym.Env):
         self.coord_record = []
         self.best_coord_record = []
         self.best_episode_govdata = []
-        self.sim_coord = []
 
         
     
@@ -288,13 +287,11 @@ class AndesPrimaryFreqControl(gym.Env):
             ydata = self.sim_case.dae.ts.x[:, widx]
             zdata = self.sim_case.dae.ts.y[:,self.dwdt]
             govdata = self.sim_case.dae.ts.y[:, tmidx]
-            uomega0data = self.sim_case.dae.ts.y[:, mucidx]
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
             self.final_rocof_render = np.array(zdata)
             self.final_gov_render = np.array(govdata)
-            self.final_gov_coord_render = np.array(uomega0data)
             
             
             if sum(self.reward_print) > self.best_reward:
