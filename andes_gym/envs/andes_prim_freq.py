@@ -281,7 +281,6 @@ class AndesPrimaryFreqControl(gym.Env):
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
             tmidx = self.gov_idx
-            mucidx = self.uomega0_idx
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
             ydata = self.sim_case.dae.ts.x[:, widx]
@@ -301,7 +300,6 @@ class AndesPrimaryFreqControl(gym.Env):
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
                 self.best_episode_govdata = self.final_gov_render
-                self.sim_coord = self.final_gov_coord_render
                                     
                                                
         return obs, reward, done, {}
