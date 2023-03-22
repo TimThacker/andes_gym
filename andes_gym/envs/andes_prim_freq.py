@@ -72,7 +72,7 @@ class AndesPrimaryFreqControl(gym.Env):
         
         # np.linspace(firstActionApplicationTime, lastActionApplicationTime, numberActionApplications)
         
-        self.action_instants = np.linspace(0.5, 30, 60)
+        self.action_instants = np.linspace(0.5, 30, 61)
 
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 5  # number of TG1 models
