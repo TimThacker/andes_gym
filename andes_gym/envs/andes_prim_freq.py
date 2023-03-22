@@ -206,8 +206,8 @@ class AndesPrimaryFreqControl(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i > 2:
-        #if self.i > 2 and self.i < 20:
+        #if self.i > 2:
+        if self.i > 2 and self.i < 20:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
             #coordsig = np.full(5, .03)
