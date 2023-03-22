@@ -96,6 +96,8 @@ for id in range(1):
     rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
     gov_tm = pd.DataFrame(env.best_episode_govdata)
     gov_tm.to_csv(save_dir + "andes_primfreq_td3_govdata_{}.csv".format(id), index=False)
+    gov_coord = pd.DataFrame(env.sim_coord)
+    gov_coord.to_csv(save_dir + "andes_primfreq_td3_govcoord_{}".format(id), index=False)
     #norm_rocof_record = pd.DataFrame(env.best_episode_rocof_norm)
     #norm_rocof_record.to_csv(save_dir + "andes_primfreq_td3_norm_rocof_dist_.csv", index=False)
     #rocof_window = pd.DataFrame(env.rocof_window)
