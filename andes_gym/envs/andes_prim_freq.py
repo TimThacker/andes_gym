@@ -304,7 +304,7 @@ class AndesPrimaryFreqControl(gym.Env):
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
                 self.best_episode_govdata = self.final_gov_render
-                self.best_episode_govcoord = self.final_gov_coord_render
+                self.sim_coord = self.final_gov_coord_render
                                     
                                                
         return obs, reward, done, {}
