@@ -152,7 +152,7 @@ class AndesPrimaryFreqControl(gym.Env):
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
         self.gov_idx = np.array(self.sim_case.IEESGOD.pout.a)
-        self.uomega0_idx = np.array(self.sim_case.IEESGOD.uomega0.a)
+        self.uomega0_idx = np.array(self.sim_case.IEESGOD.uomega0.v)
         # self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
         self.dwdt = np.array(self.sim_case.BusROCOF.Wf_y.a)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
