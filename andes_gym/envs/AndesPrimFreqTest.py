@@ -108,6 +108,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
         self.coord_record = []
         self.best_coord_record = []
         self.rocof_window = []
+        self.best_episode_govdata = []
 
         
     
@@ -142,6 +143,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
 
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
+        self.gov_idx = np.array(self.sim_case.IEESGOD.pout.a)
         # self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
         self.dwdt = np.array(self.sim_case.BusROCOF.Wf_y.a)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
@@ -260,15 +262,18 @@ class AndesPrimaryFreqControlTest(gym.Env):
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
+            tmidx = self.gov_idx
 
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
             ydata = self.sim_case.dae.ts.x[:, widx]
             zdata = self.sim_case.dae.ts.y[:,self.dwdt]
+            govdata = self.sim_case.dae.ts.y[:, tmidx]
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
             self.final_rocof_render = np.array(zdata)
+            self.final_gov_render = np.array(govdata)
             
             
             if sum(self.reward_print) > self.best_reward:
@@ -278,6 +283,7 @@ class AndesPrimaryFreqControlTest(gym.Env):
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
                 self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(np.abs(self.rocof_window)))
+                self.best_episode_govdata = self.final_gov_render
                 
                                     
                                                
