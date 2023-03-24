@@ -23,19 +23,20 @@ while True:
     if done is True:
         break
 
+       
 env.render()
 rocof_record = pd.DataFrame(env.best_episode_rocof)
-rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_dist_.csv", index=False)
+rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_dist_015.csv", index=False)
 #norm_rocof_record = pd.DataFrame(env.best_episode_rocof_norm)
 #norm_rocof_record.to_csv(save_dir + "andes_primfreq_td3_norm_rocof_dist_.csv", index=False)
 #rocof_window = pd.DataFrame(env.rocof_window)
 #rocof_window.to_csv(save_dir + "andes_primfreq_td3_rocof_window_.csv", index=False)
 coord_record = pd.DataFrame(env.best_coord_record)
-coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_dist_.csv", index=False)
+coord_record.to_csv(save_dir + "andes_primfreq_td3_coord_dist_015.csv", index=False)
 freqRec = pd.DataFrame(env.best_episode_freq)
-freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_dist_.csv", index=False)
+freqRec.to_csv(save_dir + "andes_primfreq_td3_sim_dist_015.csv", index=False)
 gov_tm = pd.DataFrame(env.best_episode_govdata)
-gov_tm.to_csv(save_dir + "andes_primfreq_td3_govdata_.csv", index=False)
+gov_tm.to_csv(save_dir + "andes_primfreq_td3_govdata_015.csv", index=False)
 #totalRewards = pd.DataFrame(env.episode_reward)
 #totalRewards.to_csv(save_dir + "andes_primfreq_td3_episodeRewards.csv", index=False)
 fig = plt.figure(figsize=(9, 6))
@@ -49,4 +50,4 @@ ax.set_ylabel("Bus Frequency [Hz]", fontsize=16)
 ax.ticklabel_format(useOffset=False)
 for i in range(env.N_Bus):
     ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
-plt.savefig(save_dir + "fig_primfreq_dynamics_dist_.pdf")
+plt.savefig(save_dir + "fig_primfreq_dynamics_dist_015.pdf")
