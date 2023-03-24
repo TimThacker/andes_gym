@@ -12,7 +12,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 env = gym.make("AndesPrimaryFreqControl-v0")
 # policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128, 64])
 #model = TD3.load('model_actnoise_0001_test.pkl')
-model = TD3.load('best_model_10.zip')
+model = TD3.load('best_model_11.zip')
 save_dir = "C:/Users/tntth/andes_gym/examples/Trained_Model_Application/"
 
 obs = env.reset()
