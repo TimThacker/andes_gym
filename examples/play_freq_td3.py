@@ -50,4 +50,4 @@ ax.set_ylabel("Bus Frequency [Hz]", fontsize=16)
 ax.ticklabel_format(useOffset=False)
 for i in range(env.N_Bus):
     ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
-plt.savefig(save_dir + "fig_primfreq_dynamics_dist_010_ver.pdf")
+plt.savefig(save_dir + "fig_primfreq_dynamics_dist_010_over.pdf")
