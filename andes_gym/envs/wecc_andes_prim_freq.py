@@ -197,7 +197,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         print("Env reset.")
         self.initialize()
         freq = self.sim_case.dae.y[self.coi]
-        rocof = self.sim_case.dae.y[self.rocof]
+        rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
         self.freq_print.append(freq[0])
         obs = np.append(freq, rocof)
         return obs
@@ -241,7 +241,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         freq = self.sim_case.dae.y[self.coi]
 
         # --- Temporarily disable ROCOF ---
-        rocof = self.sim_case.dae.y[self.rocof]
+        rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
         obs = np.append(freq, rocof)
 
         #obs = freq
