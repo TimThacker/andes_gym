@@ -273,7 +273,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.action_print.append(action)
         self.reward_print.append(reward)
 
-         if done:
+        if done:
             self.action_total_print = []
             for i in range(len(self.action_print)):
                 self.action_total_print.append(self.action_print[i])                                              
