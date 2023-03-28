@@ -146,7 +146,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         #self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
-        dist_loc = 'GENROU_'+str(random.choice([1,6,9,10,11,13,18,19,20,22]))
+        dist_loc = 'GENROU_'+str(random.choice([2,7,10,11,12,14,19,20,21,23]))
         #dist_loc = self.gen_trip
         dist_model = 'SynGen'
         #self.episode_location.append(dist_loc)
