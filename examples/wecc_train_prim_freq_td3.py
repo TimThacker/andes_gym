@@ -73,7 +73,7 @@ log_dir = "tmp/"
 os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
-for id in range(1):
+for id in range(15):
     env = gym.make('AndesPrimaryFreqControlWECC-v0')
     env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
@@ -83,7 +83,7 @@ for id in range(1):
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=200, tensorboard_log="./td3_tensorboard_WECC/")
     callback = SaveOnBestTrainingRewardCallback(id, check_freq=300, log_dir=log_dir)
     time_start = time.time()
-    model.learn(total_timesteps=300,tb_log_name="TD3_WECC", callback=callback)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=50000,tb_log_name="TD3_WECC", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
@@ -96,6 +96,8 @@ for id in range(1):
     rocof_record.to_csv(save_dir + "andes_primfreq_td3_rocof_{}.csv".format(id), index=False)
     gov_tm = pd.DataFrame(env.best_episode_govdata)
     gov_tm.to_csv(save_dir + "andes_primfreq_td3_govdata_{}.csv".format(id), index=False)
+    coi= pd.DataFrame(env.best_episode_coidata)
+    coi.to_csv(save_dir + "andes_primfreq_td3_coidata_{}.csv".format(id), index=False)
     #norm_rocof_record = pd.DataFrame(env.best_episode_rocof_norm)
     #norm_rocof_record.to_csv(save_dir + "andes_primfreq_td3_norm_rocof_dist_.csv", index=False)
     #rocof_window = pd.DataFrame(env.rocof_window)
