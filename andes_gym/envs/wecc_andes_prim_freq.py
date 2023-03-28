@@ -238,10 +238,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # get frequency and ROCOF data
         #freq = self.sim_case.dae.x[self.w]
         #coi = self.sim_case.dae.ts.y[:,self.coi]
-        freq = self.sim_case.dae.ts.y[:,self.coi]
+        freq = self.sim_case.dae.y[self.coi]
 
         # --- Temporarily disable ROCOF ---
-        rocof = self.sim_case.dae.ts.y[:,self.rocof]
+        rocof = self.sim_case.dae.y[self.rocof]
         obs = np.append(freq, rocof)
 
         #obs = freq
