@@ -71,8 +71,8 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_Bus = 29  # let it be the number of generators for now
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
 
-        self.action_space = spaces.Box(low=-.01, high=.03, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(self.N_obs,))
+        self.action_space = spaces.Box(low=-.001, high=.003, shape=(self.N_Gov,))
+        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_obs,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
