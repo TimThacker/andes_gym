@@ -223,7 +223,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                                  
         if self.i > 10 and self.i < 45:
             coordsig=action
-            #coordsig = np.zeros(self.N_Gov)
+            coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
