@@ -69,9 +69,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 29  # number of IEEEG1M models
         self.N_Bus = 29  # let it be the number of generators for now
+        self.N_obs = 6   # 3 areas, COIfreq, COIrocof
 
-        self.action_space = spaces.Box(low=-.002, high=.002, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-.01, high=.03, shape=(self.N_Gov,))
+        self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(self.N_obs,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
@@ -91,8 +92,6 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.final_obs_render = None
 
         self.freq_print = []
-        self.rocof_print = []
-        self.coi_print = []
         self.action_print = []
         self.reward_print = []
 
@@ -110,10 +109,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.best_reward = -10000
         # Record frequency of best episode
         self.best_episode_freq = []
-        self.best_episode_rocof = []
-        self.best_episode_coi = []
         self.coord_record = []
         self.best_coord_record = []
+        self.rocof_window = []
+        self.best_episode_govdata = []
 
         
     
@@ -141,13 +140,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # random or fixed disturbance magnitude
         #self.disturbance = 3
-        self.gen_trip = 'GENROU_10'
+        #self.gen_trip = 'GENROU_10'
+        
         # self.disturbance = random.uniform(0.2, 0.5)
         #self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
-        #dist_loc = 'PQ_'+str(random.randint(1,104))
-        dist_loc = self.gen_trip
+        dist_loc = 'GENROU_'+str(random.choice([1,6,9,10,11,13,18,19,20,22])
+        #dist_loc = self.gen_trip
         dist_model = 'SynGen'
         #self.episode_location.append(dist_loc)
         #self.sim_case.Alter.dev.v[0] = dist_loc
@@ -161,8 +161,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # sensed signals
         self.w = np.array(self.sim_case.GENROU.omega.a)
+        self.gov_idx = np.array(self.sim_case.IEESGOD.pout.a)
         self.coi = np.array(self.sim_case.COI.omega.a)
-        self.dwdt = np.array(self.sim_case.BusROCOF.Wf_y.a)
+        self.rocof = np.array(self.sim_case.COI.rocof_y.a)
         # self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
 
@@ -172,12 +173,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         assert self.sim_to_next(), "First simulation step failed"
 
         self.freq_print = []
-        self.coi_print = []
-        self.rocof_print = []
         self.action_print = []
         self.reward_print = []
         self.episode_freq = []
-        self.episode_coi = []
         self.coord_record = []
         
 
@@ -198,10 +196,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
     def reset(self):
         print("Env reset.")
         self.initialize()
-        freq = self.sim_case.dae.x[self.w]
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        freq = self.sim_case.dae.y[self.coi]
+        rocof = self.sim_case.dae.y[self.rocof]
         self.freq_print.append(freq[0])
-        #self.rocof_print.append(rocof[0])
+        self.rocof_print.append(rocof[0])
         obs = np.append(freq, rocof)
         return obs
 
@@ -220,6 +218,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
+        if self.i < 10:
+            windowdata = np.array(self.sim_case.dae.ts.y[:,self.rocof])
+            self.rocof_window = windowdata                         
+                                 
         if self.i > 10 and self.i < 45:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
@@ -235,11 +237,12 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         sim_crashed = not self.sim_to_next()
 
         # get frequency and ROCOF data
-        freq = self.sim_case.dae.x[self.w]
+        #freq = self.sim_case.dae.x[self.w]
         #coi = self.sim_case.dae.ts.y[:,self.coi]
+        freq = self.sim_case.dae.ts.y[:,self.coi]
 
         # --- Temporarily disable ROCOF ---
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        rocof = self.sim_case.dae.ts.y[:,self.rocof]
         obs = np.append(freq, rocof)
 
         #obs = freq
@@ -252,25 +255,13 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # Test: Only consider negative rewards past 5s (Gen Trip)
         
-        if self.i > 10:
-            if not sim_crashed and done:
-                reward -= np.sum(np.abs(3000 * (freq - 0.9995)))
-            else:
-                reward -= np.sum(np.abs(50 * (freq - 0.9995)))
-            
-            if np.any(freq < 0.9995):
-                reward -= np.sum(np.abs(3000 * (0.9995 - freq)))
-            if np.any(freq > 0.9995):
-                reward -= np.sum(np.abs(1000 * (freq - 1)))
-            
-            
-            if not sim_crashed and done:
-                reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            else:
-                reward -= np.sum(np.abs(1000 * rocof))
-                
-        else: 
-            reward -= 0
+        if self.i > 10 and not sim_crashed and done and np.max(np.abs(self.rocof_window)) > 0:
+            #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
+            reward -= 100*np.sum(np.abs(norm_rocof))
+        elif np.max(np.abs(self.rocof_window)) > 0:
+            norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
+            reward -= 100*np.sum(np.abs(norm_rocof))
 
         # store last action
         self.action_last = action
@@ -282,14 +273,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.action_print.append(action)
         self.reward_print.append(reward)
 
-        if done:
+         if done:
             self.action_total_print = []
             for i in range(len(self.action_print)):
                 self.action_total_print.append(self.action_print[i])                                              
             print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
-            #print("Disturbance: {}".format(self.disturbance))
-            #print("COI Freq on #0: {}".format(self.coi_print))
+            print("Disturbance: {}".format(self.disturbance))
+            print("Freq on #0: {}".format(self.freq_print))
             #print("Rewards: {}".format(self.reward_print))
             print("Total Rewards: {}".format(sum(self.reward_print)))
 
@@ -298,26 +289,29 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
             # store data for rendering. To workwround automatic resetting by VecEnv
             widx = self.w
-            coi_idx = self.coi
+            tmidx = self.gov_idx
+
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
             ydata = self.sim_case.dae.ts.x[:, widx]
             zdata = self.sim_case.dae.ts.y[:,self.dwdt]
-            coidata = self.sim_case.dae.ts.y[:, coi_idx]
+            govdata = self.sim_case.dae.ts.y[:, tmidx]
 
             self.t_render = np.array(xdata)
             self.final_obs_render = np.array(ydata)
             self.final_rocof_render = np.array(zdata)
-            self.coi = np.array(coidata)
+            self.final_gov_render = np.array(govdata)
             
             
             if sum(self.reward_print) > self.best_reward:
                 self.best_reward = sum(self.reward_print)
                 #self.best_episode = self.XXXX
                 self.best_episode_freq = self.final_obs_render
-                self.best_episode_rocof = self.final_rocof_render
-                self.best_episode_coi = self.coi
                 self.best_coord_record = self.coord_record
+                self.best_episode_rocof = self.final_rocof_render
+                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(np.abs(self.rocof_window)))
+                self.best_episode_govdata = self.final_gov_render
+                
                                     
                                                
         return obs, reward, done, {}
