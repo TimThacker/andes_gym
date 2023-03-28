@@ -291,7 +291,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
-            ydata = self.sim_case.dae.ts.x[:, self.coi]
+            ydata = self.sim_case.dae.ts.y[:, self.coi]
             zdata = self.sim_case.dae.ts.y[:,self.rocof]
             govdata = self.sim_case.dae.ts.y[:, tmidx]
 
