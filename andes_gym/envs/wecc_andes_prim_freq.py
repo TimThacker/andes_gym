@@ -291,7 +291,8 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
-            ydata = self.sim_case.dae.ts.y[:, self.coi]
+            ydata = self.sim_case.dae.ts.x[:, self.widx]
+            coidata = self.sim_case.dae.ts.y[:,self.coi]
             zdata = self.sim_case.dae.ts.y[:,self.rocof]
             govdata = self.sim_case.dae.ts.y[:, tmidx]
 
@@ -299,6 +300,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             self.final_obs_render = np.array(ydata)
             self.final_rocof_render = np.array(zdata)
             self.final_gov_render = np.array(govdata)
+            self.final_coi_render = np.array(coidata)
             
             
             if sum(self.reward_print) > self.best_reward:
@@ -310,6 +312,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 #if np.max(np.abs(self.rocof_window))) > 0:
                     #self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(np.abs(self.rocof_window)))
                 self.best_episode_govdata = self.final_gov_render
+                self.best_episode_coidata = self.final_coi_render
                 
                                     
                                                
