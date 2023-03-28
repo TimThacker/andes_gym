@@ -217,11 +217,11 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i < 10:
+        if self.i < 12:
             windowdata = np.array(self.sim_case.dae.ts.y[:,self.rocof])
             self.rocof_window = windowdata                         
                                  
-        if self.i > 10 and self.i < 45:
+        if self.i > 12 and self.i < 45:
             coordsig=action
             coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
@@ -254,7 +254,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # Test: Only consider negative rewards past 5s (Gen Trip)
         
-        if self.i > 10 and not sim_crashed and done and np.max(np.abs(self.rocof_window)) > 0:
+        if self.i > 12 and not sim_crashed and done and np.max(np.abs(self.rocof_window)) > 0:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
             norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
             reward -= 100*np.sum(np.abs(norm_rocof))
@@ -291,7 +291,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
             self.sim_case.dae.ts.unpack()
             xdata = self.sim_case.dae.ts.t
-            ydata = self.sim_case.dae.ts.x[:, widx]
+            ydata = self.sim_case.dae.ts.x[:, self.coi]
             zdata = self.sim_case.dae.ts.y[:,self.rocof]
             govdata = self.sim_case.dae.ts.y[:, tmidx]
 
