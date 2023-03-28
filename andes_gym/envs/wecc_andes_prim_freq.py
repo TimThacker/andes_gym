@@ -71,7 +71,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_Bus = 29  # let it be the number of generators for now
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
 
-        self.action_space = spaces.Box(low=-.001, high=.003, shape=(self.N_Gov,))
+        self.action_space = spaces.Box(low=-.0005, high=.001, shape=(self.N_Gov,))
         self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_obs,))
 
         # This code is executed by the index of the action applications, rather than
@@ -140,14 +140,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # random or fixed disturbance magnitude
         #self.disturbance = 3
-        #self.gen_trip = 'GENROU_10'
+        self.gen_trip = 'GENROU_10'
         
         # self.disturbance = random.uniform(0.2, 0.5)
         #self.sim_case.Alter.amount.v[0] = self.disturbance
         
         # random or fixed disturbance location
-        dist_loc = 'GENROU_'+str(random.choice([2,7,10,11,12,14,19,20,21,23]))
-        #dist_loc = self.gen_trip
+        #dist_loc = 'GENROU_'+str(random.choice([2,7,10,11,12,14,19,20,21,23]))
+        dist_loc = self.gen_trip
         dist_model = 'SynGen'
         #self.episode_location.append(dist_loc)
         #self.sim_case.Alter.dev.v[0] = dist_loc
