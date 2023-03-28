@@ -278,7 +278,6 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 self.action_total_print.append(self.action_print[i])                                              
             print("Action {}".format(self.action_print))
             print("Action Total: {}".format(self.action_total_print))
-            print("Disturbance: {}".format(self.disturbance))
             print("Freq on #0: {}".format(self.freq_print))
             #print("Rewards: {}".format(self.reward_print))
             print("Total Rewards: {}".format(sum(self.reward_print)))
