@@ -307,7 +307,8 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                 self.best_episode_freq = self.final_obs_render
                 self.best_coord_record = self.coord_record
                 self.best_episode_rocof = self.final_rocof_render
-                self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(np.abs(self.rocof_window)))
+                #if np.max(np.abs(self.rocof_window))) > 0:
+                    #self.best_episode_rocof_norm = np.divide(self.final_rocof_render, np.max(np.abs(self.rocof_window)))
                 self.best_episode_govdata = self.final_gov_render
                 
                                     
