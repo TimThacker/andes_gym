@@ -72,7 +72,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
 
         self.action_space = spaces.Box(low=-.0005, high=.001, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2,))
+        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2*self.N_Gov))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
@@ -164,7 +164,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.gov_idx = np.array(self.sim_case.IEESGOD.pout.a)
         self.coi = np.array(self.sim_case.COI.omega.a)
         self.rocof = np.array(self.sim_case.COI.rocof_y.a)
-        # self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
+        self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
 
         self.action_last = np.zeros(self.N_Gov)
@@ -196,8 +196,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
     def reset(self):
         print("Env reset.")
         self.initialize()
-        freq = self.sim_case.dae.y[self.coi]
-        rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
+        #freq = self.sim_case.dae.y[self.coi]
+        freq = self.sim_case.case.dae.x[self.w]
+        #rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
+        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         self.freq_print.append(freq[0])
         obs = np.append(freq, rocof)
         return obs
@@ -217,9 +219,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         # apply control for current step
         #coordsig=action*(1/100)
         
-        if self.i < 12:
-            windowdata = np.array(self.sim_case.dae.ts.y[:,self.rocof])
-            self.rocof_window = windowdata                         
+        #if self.i < 12:
+            #windowdata = np.array(self.sim_case.dae.ts.y[:,self.rocof])
+            #self.rocof_window = windowdata                         
                                  
         if self.i > 12 and self.i < 45:
             coordsig=action
@@ -236,12 +238,13 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         sim_crashed = not self.sim_to_next()
 
         # get frequency and ROCOF data
-        #freq = self.sim_case.dae.x[self.w]
+        freq = self.sim_case.dae.x[self.w]
         #coi = self.sim_case.dae.ts.y[:,self.coi]
-        freq = self.sim_case.dae.y[self.coi]
+        #freq = self.sim_case.dae.y[self.coi]
 
         # --- Temporarily disable ROCOF ---
-        rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
+        #rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
+        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         obs = np.append(freq, rocof)
 
         #obs = freq
@@ -254,14 +257,19 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         # Test: Only consider negative rewards past 5s (Gen Trip)
         
-        if self.i > 12 and not sim_crashed and done and np.max(np.abs(self.rocof_window)) > 0:
+        #if self.i > 12 and not sim_crashed and done and np.max(np.abs(self.rocof_window)) > 0:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
-            reward -= 1000*np.sum(np.abs(norm_rocof))
-        elif np.max(np.abs(self.rocof_window)) > 0:
-            norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
-            reward -= 1000*np.sum(np.abs(norm_rocof))
+            #norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
+            #reward -= 1000*np.sum(np.abs(norm_rocof))
+        #elif np.max(np.abs(self.rocof_window)) > 0:
+            #norm_rocof = np.divide(rocof, np.max(np.abs(self.rocof_window)))
+            #reward -= 1000*np.sum(np.abs(norm_rocof))
 
+        if not sim_crashed and done:
+            #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
+            reward -= 1000*np.sum(np.abs(rocof))
+        else:
+            reward -= 1000*np.sum(np.abs(rocof))    
         # store last action
         self.action_last = action
 
