@@ -164,7 +164,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.gov_idx = np.array(self.sim_case.IEESGOD.pout.a)
         self.coi = np.array(self.sim_case.COI.omega.a)
         self.rocof = np.array(self.sim_case.COI.rocof_y.a)
-        self.dwdt = np.array(self.sim_case.BusFreq.dwdt)
+        self.dwdt = np.array(self.sim_case.BusFreq.a)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
 
         self.action_last = np.zeros(self.N_Gov)
