@@ -47,7 +47,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "wecc_full_ieesgod_toggle_testK.xlsx")
+        self.path = os.path.join(path, "wecc_full_rocofcoi.xlsx")
 
         self.tf = 100.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -72,7 +72,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
 
         self.action_space = spaces.Box(low=-.0005, high=.001, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_obs,))
+        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2*self.N_Gov,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
