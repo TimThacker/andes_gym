@@ -70,9 +70,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_Gov = 29  # number of IEEEG1M models
         self.N_Bus = 29  # let it be the number of generators for now
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
+        self.N_coi = 1
 
-        self.action_space = spaces.Box(low=-.0005, high=.001, shape=(self.N_Gov,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2*self.N_Gov,))
+        self.action_space = spaces.Box(low=-.0005, high=.002, shape=(self.N_coi,))
+        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_obs,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
@@ -196,10 +197,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
     def reset(self):
         print("Env reset.")
         self.initialize()
-        #freq = self.sim_case.dae.y[self.coi]
-        freq = self.sim_case.dae.x[self.w]
-        #rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        freq = self.sim_case.dae.y[self.coi]
+        #freq = self.sim_case.dae.x[self.w]
+        rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
+        #rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         self.freq_print.append(freq[0])
         obs = np.append(freq, rocof)
         return obs
@@ -223,13 +224,14 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             #windowdata = np.array(self.sim_case.dae.ts.y[:,self.rocof])
             #self.rocof_window = windowdata                         
                                  
-        if self.i > 12 and self.i < 45:
+        if self.i > 11 and self.i < 45:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
         else:
-            coordsig = np.zeros(self.N_Gov)
+            #coordsig = np.zeros(self.N_Gov)
+            coordsig = np.zeros(self.N_coi)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
             self.coord_record.append(coordsig)
 
@@ -238,13 +240,13 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         sim_crashed = not self.sim_to_next()
 
         # get frequency and ROCOF data
-        freq = self.sim_case.dae.x[self.w]
+        #freq = self.sim_case.dae.x[self.w]
         #coi = self.sim_case.dae.ts.y[:,self.coi]
-        #freq = self.sim_case.dae.y[self.coi]
+        freq = self.sim_case.dae.y[self.coi]
 
         # --- Temporarily disable ROCOF ---
-        #rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
-        rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
+        rocof = np.array(self.sim_case.dae.y[self.rocof]).reshape((-1, ))
+        #rocof = np.array(self.sim_case.dae.y[self.dwdt]).reshape((-1, ))
         obs = np.append(freq, rocof)
 
         #obs = freq
@@ -267,9 +269,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
 
         if not sim_crashed and done:
             #reward -= np.sum(np.abs(30000 * rocof ))  # the final episode
-            reward -= 1000*np.sum(np.abs(rocof))
+            reward -= 10000*np.sum(np.abs(rocof))
         else:
-            reward -= 1000*np.sum(np.abs(rocof))    
+            reward -= 10000*np.sum(np.abs(rocof))    
         # store last action
         self.action_last = action
 
