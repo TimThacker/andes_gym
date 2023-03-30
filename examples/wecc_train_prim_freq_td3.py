@@ -137,5 +137,5 @@ for id in range(15):
     ax.ticklabel_format(useOffset=False)
     #for i in range(env.N_Bus):
         #ax.plot(env.t_render, env.best_episode_coidata[:,i] * 60)
-        ax.plot(env.t_render, env.best_episode_coidata * 60)
+    ax.plot(env.t_render, env.best_episode_coidata * 60)
     plt.savefig(save_dir+ "fig_primfreq_dynamics_best_{}.pdf".format(id))
