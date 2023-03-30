@@ -73,7 +73,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_coi = 1
 
         self.action_space = spaces.Box(low=-.0005, high=.002, shape=(self.N_coi,))
-        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(self.N_obs,))
+        self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2*self.N_obs,))
 
         # This code is executed by the index of the action applications, rather than
         # the time domain simulation time step from ANDES.
