@@ -135,6 +135,7 @@ for id in range(15):
     ax.set_xlabel("Time [s]", fontsize=16)
     ax.set_ylabel("Bus Frequency [Hz]", fontsize=16)
     ax.ticklabel_format(useOffset=False)
-    for i in range(env.N_Bus):
-        ax.plot(env.t_render, env.best_episode_freq[:, i] * 60)
+    #for i in range(env.N_Bus):
+        #ax.plot(env.t_render, env.best_episode_coidata[:,i] * 60)
+        ax.plot(env.t_render, env.best_episode_coidata * 60)
     plt.savefig(save_dir+ "fig_primfreq_dynamics_best_{}.pdf".format(id))
