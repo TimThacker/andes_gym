@@ -47,7 +47,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "wecc_full_rocofcoi.xlsx")
+        self.path = os.path.join(path, "wecc_full_ieesgod_toggle_testK.xlsx")
 
         self.tf = 100.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -167,6 +167,9 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.rocof = np.array(self.sim_case.COI.rocof_y.a)
         self.dwdt = np.array(self.sim_case.BusROCOF.Wf_y.a)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
+        self.tg_idx_coi1 = ['IEESGOD_1','IEESGOD_2','IEESGOD_3','IEESGOD_4','IEESGOD_7','IEESGOD_8','IEESGOD_9','IEESGOD_10','IEESGOD_13','IEESGOD_15','IEESGOD_16','IEESGOD_17','IEESGOD_18','IEESGOD_28','IEESGOD_29']
+        self.tg_idx_coi2 = ['IEESGOD_6','IEESGOD_11','IEESGOD_12','IEESGOD_14','IEESGOD_19','IEESGOD_23','IEESGOD_24','IEESGOD_25','IEESGOD_26','IEESGOD_27']
+        self.tg_idx_coi3 = ['IEESGOD_20','IEESGOD_21','IEESGOD_22']
 
         self.action_last = np.zeros(self.N_Gov)
 
@@ -227,12 +230,16 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         if self.i > 10 and self.i < 45:
             coordsig=action
             #coordsig = np.zeros(self.N_Gov)
-            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig(:,1), attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi2, value=coordsig(:,2), attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi3, value=coordsig(:,3), attr='v')
             self.coord_record.append(coordsig)
         else:
             #coordsig = np.zeros(self.N_Gov)
             coordsig = np.zeros(self.N_coi)
-            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx, value=coordsig, attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig(:,1), attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi2, value=coordsig(:,2), attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi3, value=coordsig(:,3), attr='v')
             self.coord_record.append(coordsig)
 
 
