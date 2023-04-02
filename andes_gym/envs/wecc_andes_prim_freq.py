@@ -70,7 +70,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_Gov = 29  # number of IEEEG1M models
         self.N_Bus = 29  # let it be the number of generators for now
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
-        self.N_coi = 1
+        self.N_coi = 3
 
         self.action_space = spaces.Box(low=-.001, high=.02, shape=(self.N_coi,))
         self.observation_space = spaces.Box(low=-0.2, high=0.2, shape=(2*self.N_coi,))
