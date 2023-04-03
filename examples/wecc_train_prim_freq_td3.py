@@ -54,7 +54,7 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
 
               # New best model, you could save the agent here
               #if mean_reward > self.best_mean_reward and mean_reward > -900:
-              if mean_reward > self.best_mean_reward and mean_reward > -210:
+              if mean_reward > self.best_mean_reward and mean_reward > -290:
                   self.best_mean_reward = mean_reward
                   # Example for saving best model
                   if self.verbose >= 1:
@@ -73,17 +73,17 @@ log_dir = "tmp/"
 os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
-for id in range(1):
+for id in range(5):
     env = gym.make('AndesPrimaryFreqControlWECC-v0')
     env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
     train_freq = (1,"episode")
     policy_kwargs = dict(activation_fn=torch.nn.ReLU, net_arch=[128,64])  # kwargs == keyword arguments
-    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=400, tensorboard_log="./td3_tensorboard_WECC/")
+    model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, learning_rate = 0.0001, batch_size=200, learning_starts=400, tensorboard_log="./td3_tensorboard_WECC/")
     callback = SaveOnBestTrainingRewardCallback(id, check_freq=600, log_dir=log_dir)
     time_start = time.time()
-    model.learn(total_timesteps=300,tb_log_name="TD3_WECC", callback=callback)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=50000,tb_log_name="TD3_WECC", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
