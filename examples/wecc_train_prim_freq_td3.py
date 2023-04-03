@@ -73,7 +73,7 @@ log_dir = "tmp/"
 os.makedirs(log_dir, exist_ok=True)
 
 # Change the range size to train a larger number of models.
-for id in range(10):
+for id in range(5):
     env = gym.make('AndesPrimaryFreqControlWECC-v0')
     env = Monitor(env, log_dir)
     n_actions = env.action_space.shape[-1]
