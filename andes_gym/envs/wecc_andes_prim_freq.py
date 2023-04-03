@@ -72,7 +72,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_obs = 6   # 3 areas, COIfreq, COIrocof
         self.N_coi = 3
 
-        self.action_space = spaces.Box(low=-.01, high=.03, shape=(self.N_coi,))
+        self.action_space = spaces.Box(low=-.001, high=.02, shape=(self.N_coi,))
         self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(2*self.N_coi,))
 
         # This code is executed by the index of the action applications, rather than
