@@ -234,7 +234,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             #windowdata = np.array(self.sim_case.dae.ts.y[:,self.rocof])
             #self.rocof_window = windowdata                         
                                  
-        if self.i > 10 and self.i < 45:
+        if self.i > 10 and self.i < 30:
             coordsig=action
             #coordsig = np.zeros(self.N_area)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig[0], attr='v')
