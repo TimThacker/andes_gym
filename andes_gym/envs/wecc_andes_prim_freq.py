@@ -69,10 +69,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N = len(self.action_instants)  # number of actions
         self.N_Gov = 29  # number of IEEEG1M models
         self.N_Bus = 29  # let it be the number of generators for now
-        self.N_obs = 6   # 3 areas, COIfreq, COIrocof
-        self.N_coi = 3
+        self.N_obs = 8   # 3 areas, COIfreq, COIrocof
+        self.N_coi = 4
 
-        self.action_space = spaces.Box(low=-.001, high=.01, shape=(self.N_coi,))
+        self.action_space = spaces.Box(low=-.001, high=.02, shape=(self.N_coi,))
         self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(2*self.N_coi,))
 
         # This code is executed by the index of the action applications, rather than
@@ -167,9 +167,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.rocof = np.array(self.sim_case.COI.rocof_y.a)
         self.dwdt = np.array(self.sim_case.BusROCOF.Wf_y.a)
         self.tg_idx = [i for i in self.sim_case.TurbineGov._idx2model.keys()]
-        self.tg_idx_coi1 = ['IEESGOD_1','IEESGOD_2','IEESGOD_3','IEESGOD_4','IEESGOD_7','IEESGOD_8','IEESGOD_9','IEESGOD_10','IEESGOD_13','IEESGOD_15','IEESGOD_16','IEESGOD_17','IEESGOD_18','IEESGOD_28','IEESGOD_29']
-        self.tg_idx_coi2 = ['IEESGOD_6','IEESGOD_11','IEESGOD_12','IEESGOD_14','IEESGOD_19','IEESGOD_23','IEESGOD_24','IEESGOD_25','IEESGOD_26','IEESGOD_27']
-        self.tg_idx_coi3 = ['IEESGOD_20','IEESGOD_21','IEESGOD_22']
+        self.tg_idx_coi1 = ['IEESGOD_8','IEESGOD_9','IEESGOD_15','IEESGOD_16','IEESGOD_17','IEESGOD_18']
+        self.tg_idx_coi2 = ['IEESGOD_1','IEESGOD_2','IEESGOD_3','IEESGOD_4','IEESGOD_7','IEESGOD_10','IEESGOD_13','IEESGOD_28','IEESGOD_29']
+        self.tg_idx_coi3 = ['IEESGOD_19','IEESGOD_20','IEESGOD_21','IEESGOD_22']
+        self.tg_idx_coi4 = ['IEESGOD_5','IEESGOD_6','IEESGOD_11','IEESGOD_12','IEESGOD_14','IEESGOD_23','IEESGOD_24','IEESGOD_25','IEESGOD_26','IEESGOD_27']
 
         self.action_last = np.zeros(self.N_Gov)
 
@@ -229,10 +230,11 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                                  
         if self.i > 10 and self.i < 45:
             coordsig=action
-            #coordsig = np.zeros(self.N_coi)
+            coordsig = np.zeros(self.N_coi)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig[0], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi2, value=coordsig[1], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi3, value=coordsig[2], attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi4, value=coordsig[3], attr='v')
             self.coord_record.append(coordsig)
         else:
             #coordsig = np.zeros(self.N_Gov)
@@ -240,6 +242,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig[0], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi2, value=coordsig[1], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi3, value=coordsig[2], attr='v')
+            self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi4, value=coordsig[3], attr='v')
             self.coord_record.append(coordsig)
 
 
