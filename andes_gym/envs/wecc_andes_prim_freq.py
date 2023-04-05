@@ -128,6 +128,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         """
         Initialize the andes simulation
         """
+   
+        self.i = 0
+        self.sim_case = andes.run(self.path, no_output=True)
+        
         for i in range(29):
             M = self.sim_case.GENROU.get("M", 'GENROU_'+str((i+1)))
             self.sim_case.GENROU.alter("M", 'GENROU_'+str((i+1)), M)
@@ -155,9 +159,6 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             M = self.sim_case.GENROU.get("M",'GENROU_'+str(j))
             self.sim_case.GENROU.alter("M",'GENROU_'+str(j), M)
         
-        
-        self.i = 0
-        self.sim_case = andes.run(self.path, no_output=True)
         self.sim_case.PQ.config.p2p = 1
         self.sim_case.PQ.config.p2z = 0
         self.sim_case.PQ.config.p2i = 0
