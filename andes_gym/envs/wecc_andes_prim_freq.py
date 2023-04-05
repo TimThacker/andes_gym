@@ -132,32 +132,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.i = 0
         self.sim_case = andes.run(self.path, no_output=True)
         
-        for i in range(29):
-            M = self.sim_case.GENROU.get("M", 'GENROU_'+str((i+1)))
-            self.sim_case.GENROU.alter("M", 'GENROU_'+str((i+1)), M)
-            self.sim_case.IEESGOD.alter("PMAX", 'IEESGOD_'+str((i+1)),1.5)
-            self.sim_case.IEESGOD.alter("PMIN", 'IEESGOD_'+str((i+1)),0)
-            T1 = self.sim_case.IEESGOD.get("T1", 'IEESGOD_'+str((i+1)))
-            self.sim_case.IEESGOD.alter("T1", 'IEESGOD_'+str((i+1)), 10)
-            T2 = self.sim_case.IEESGOD.get("T2", 'IEESGOD_'+str((i+1)))
-            self.sim_case.IEESGOD.alter("T2", 'IEESGOD_'+str((i+1)), T2)
-        
-        coi1 = [8,9,15,16,17,18]
-        for j in coi1:
-            M = self.sim_case.GENROU.get("M",'GENROU_'+str(j))
-            self.sim_case.GENROU.alter("M",'GENROU_'+str(j), M)   
-        coi2 = [1,2,3,4,7,10,13,28,29]
-        for j in coi2:
-            M = self.sim_case.GENROU.get("M",'GENROU_'+str(j))
-            self.sim_case.GENROU.alter("M",'GENROU_'+str(j), 2.5*M)   
-        coi3 = [19,20,21,22]
-        for j in coi3:
-            M = self.sim_case.GENROU.get("M",'GENROU_'+str(j))
-            self.sim_case.GENROU.alter("M",'GENROU_'+str(j), 4.5*M)
-        coi4 = [5,6,11,12,14,23,24,25,26,27]
-        for j in coi4:
-            M = self.sim_case.GENROU.get("M",'GENROU_'+str(j))
-            self.sim_case.GENROU.alter("M",'GENROU_'+str(j), M)
+  
         
         self.sim_case.PQ.config.p2p = 1
         self.sim_case.PQ.config.p2z = 0
