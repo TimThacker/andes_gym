@@ -47,7 +47,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         Environment initialization
         """
         path = pathlib.Path(__file__).parent.absolute()
-        self.path = os.path.join(path, "wecc_full_ieesgod_toggle_testK_damping.xlsx")
+        self.path = os.path.join(path, "wecc_full_ieesgod_toggle_testcoi.xlsx")
 
         self.tf = 100.0     # end of simulation time
         self.tstep = 1/30  # simulation time step
@@ -70,9 +70,10 @@ class AndesPrimaryFreqControlWECC(gym.Env):
         self.N_Gov = 29  # number of IEEEG1M models
         self.N_Bus = 29  # let it be the number of generators for now
         self.N_obs = 8   # 3 areas, COIfreq, COIrocof
-        self.N_coi = 4
+        self.N_coi = 1
+        self.N_area = 4
 
-        self.action_space = spaces.Box(low=-.0005, high=.005, shape=(self.N_coi,))
+        self.action_space = spaces.Box(low=-.0001, high=.001, shape=(self.N_area,))
         self.observation_space = spaces.Box(low=-0.3, high=0.3, shape=(2*self.N_coi,))
 
         # This code is executed by the index of the action applications, rather than
@@ -235,7 +236,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
                                  
         if self.i > 10 and self.i < 45:
             coordsig=action
-            #coordsig = np.zeros(self.N_coi)
+            coordsig = np.zeros(self.N_area)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig[0], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi2, value=coordsig[1], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi3, value=coordsig[2], attr='v')
@@ -243,7 +244,7 @@ class AndesPrimaryFreqControlWECC(gym.Env):
             self.coord_record.append(coordsig)
         else:
             #coordsig = np.zeros(self.N_Gov)
-            coordsig = np.zeros(self.N_coi)
+            coordsig = np.zeros(self.N_area)
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi1, value=coordsig[0], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi2, value=coordsig[1], attr='v')
             self.sim_case.TurbineGov.set(src='uomega0', idx=self.tg_idx_coi3, value=coordsig[2], attr='v')
