@@ -83,7 +83,7 @@ for id in range(1):
     model = TD3(MlpPolicy, env, verbose=1, policy_kwargs=policy_kwargs, action_noise=action_noise, train_freq=train_freq, batch_size=200, learning_starts=200, tensorboard_log="./td3_tensorboard_bigbatch_single/")
     callback = SaveOnBestTrainingRewardCallback(id, check_freq=300, log_dir=log_dir)
     time_start = time.time()
-    model.learn(total_timesteps=100,tb_log_name="TD3_test_bigbatch_single", callback=callback)  # we need to change the total steps with action numbers
+    model.learn(total_timesteps=10000,tb_log_name="TD3_test_bigbatch_single", callback=callback)  # we need to change the total steps with action numbers
     
     print("training {} completed using {}".format(id, time.time() - time_start))
     
